@@ -11,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,18 +26,22 @@ import java.util.Map;
 @RestController
 @RequestMapping("/auth")
 public class UserController {
+
     @Autowired
     private UserRepository userRepository;
+
     @Autowired
     private AuthenticationManager authenticationManager;
+
     @Autowired
     private JwtTokenService jwtTokenService;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+
     @PostMapping("/signup")
-    private ResponseEntity<?> signUp(
-            @Valid @RequestBody UserSignupDTO userSignupDTO,
-            BindingResult bindingResult
-    ) throws Exception {
+    public ResponseEntity<?> signUp(@Valid @RequestBody UserSignupDTO userSignupDTO, BindingResult bindingResult) throws Exception {
         Map<String, Object> response = new HashMap<>();
 
         if (bindingResult.hasErrors()) {
@@ -49,7 +55,7 @@ public class UserController {
         }
 
         User newUser = userSignupDTO.toUser();
-        newUser.setPassword(new BCryptPasswordEncoder().encode(newUser.getPassword()));
+        newUser.setPassword(this.passwordEncoder.encode(userSignupDTO.getPassword()));
         newUser.setRole(UserRole.ROLE_USER);
 
         userRepository.save(newUser);
@@ -58,11 +64,9 @@ public class UserController {
         return ResponseEntity.ok().body(response);
     }
 
+
     @PostMapping("/signin")
-    private ResponseEntity<?> signin(
-            @Valid @RequestBody UserSigninDTO userSigninDTO,
-            BindingResult bindingResult
-    ) throws Exception {
+    public ResponseEntity<?> signIn(@Valid @RequestBody UserSigninDTO userSigninDTO, BindingResult bindingResult) {
         Map<String, Object> response = new HashMap<>();
 
         if (bindingResult.hasErrors()) {
@@ -70,17 +74,23 @@ public class UserController {
             return ResponseEntity.badRequest().body(response);
         }
 
-        var authentication = new UsernamePasswordAuthenticationToken(userSigninDTO.getUsername(), userSigninDTO.getPassword());
-        var auth = authenticationManager.authenticate(authentication);
-        var token = jwtTokenService.generate((User) auth.getPrincipal());
-
-        if (token == "") {
+        UserDetails user = userRepository.findByUsername(userSigninDTO.getUsername());
+        if (user == null || !this.passwordEncoder.matches(userSigninDTO.getPassword(), user.getPassword())) {
             response.put("message", "Invalid username or password");
-            return ResponseEntity.ok().body(response);
+            return ResponseEntity.badRequest().body(response);
         }
 
-        response.put("message", "User founded successfully");
-        response.put("data", token);
-        return ResponseEntity.ok().body(response);
+        try {
+            var authenticationToken = new UsernamePasswordAuthenticationToken(userSigninDTO.getUsername(), userSigninDTO.getPassword());
+            var authentication = authenticationManager.authenticate(authenticationToken);
+            var token = jwtTokenService.generate((User) authentication.getPrincipal());
+
+            response.put("message", "User found successfully");
+            response.put("data", token);
+            return ResponseEntity.ok().body(response);
+        } catch (AuthenticationException e) {
+            response.put("message", "An internal error occurred");
+            return ResponseEntity.internalServerError().body(response);
+        }
     }
 }
