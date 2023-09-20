@@ -5,6 +5,8 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.study.forum.models.User;
+import com.study.forum.repositories.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,9 @@ import java.util.Date;
 public class JwtTokenService {
     @Value("${api.jwt.secret}")
     private String secret;
+
+    @Autowired
+    private UserRepository userRepository;
 
     public String generate(User user) {
         try {
@@ -42,6 +47,13 @@ public class JwtTokenService {
         } catch (JWTVerificationException e) {
             return "";
         }
+    }
+
+    public User getUserByToken(String token) {
+        token = token.replace("Bearer ", "");
+        String username = this.validate(token);
+
+        return (User) userRepository.findByUsername(username);
     }
 
     public static Date generateExpirationTime() {

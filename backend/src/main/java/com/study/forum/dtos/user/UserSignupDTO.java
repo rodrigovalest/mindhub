@@ -1,4 +1,4 @@
-package com.study.forum.dtos;
+package com.study.forum.dtos.user;
 
 import com.study.forum.models.User;
 import jakarta.validation.constraints.NotBlank;

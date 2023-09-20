@@ -1,7 +1,7 @@
 package com.study.forum.controllers;
 
-import com.study.forum.dtos.UserSigninDTO;
-import com.study.forum.dtos.UserSignupDTO;
+import com.study.forum.dtos.user.UserSigninDTO;
+import com.study.forum.dtos.user.UserSignupDTO;
 import com.study.forum.enums.UserRole;
 import com.study.forum.models.User;
 import com.study.forum.repositories.UserRepository;
@@ -50,7 +50,12 @@ public class UserController {
         }
 
         if (userRepository.findByUsername(userSignupDTO.getUsername()) != null) {
-            response.put("message", "This user already exists");
+            response.put("message", "This username already exists");
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        if (userRepository.findByEmail(userSignupDTO.getEmail()) != null) {
+            response.put("message", "This email is already being used");
             return ResponseEntity.badRequest().body(response);
         }
 
