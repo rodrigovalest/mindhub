@@ -112,7 +112,7 @@ public class PostController {
         post.setText(postRequestDTO.getText());
         this.postRepository.save(post);
 
-        response.put("message", "Success in update post");
+        response.put("message", "Success on update post");
         response.put("data", new PostResponseDTO(post));
         return ResponseEntity.ok().body(response);
     }

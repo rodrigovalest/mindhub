@@ -1,6 +1,5 @@
 package com.study.forum.models;
 
-import com.study.forum.enums.PostCategory;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -15,8 +14,8 @@ import java.util.UUID;
 @Getter
 @Setter
 @Entity
-@Table(name = "TB_POSTS")
-public class Post {
+@Table(name = "TB_COMMENTS")
+public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
@@ -25,15 +24,16 @@ public class Post {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Column(nullable = false)
-    private String title;
+    @ManyToOne
+    @JoinColumn(name = "post_id", nullable = false)
+    private Post post;
+
+    @ManyToOne
+    @JoinColumn(name = "parent_comment_id", nullable = true)
+    private Comment parentComment;
 
     @Column(columnDefinition = "TEXT", nullable = false, name = "text")
     private String text;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = true)
-    private PostCategory category;
 
     @CreationTimestamp
     private LocalDateTime creationTimestamp;

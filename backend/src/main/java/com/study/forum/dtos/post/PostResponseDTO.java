@@ -27,4 +27,3 @@ public class PostResponseDTO {
         this.category = post.getCategory().getDisplayCategory();
     }
 }
-
