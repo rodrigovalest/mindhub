@@ -32,7 +32,7 @@ public class CommentController {
     private CommentRepository commentRepository;
 
     @PostMapping
-    public ResponseEntity<?> saveComment(
+    public ResponseEntity<?> save(
             @RequestHeader(value = "Authorization", required = true) String token,
             @Valid @RequestBody CommentRequestDTO commentRequestDTO,
             BindingResult bindingResult
@@ -74,9 +74,9 @@ public class CommentController {
         return ResponseEntity.ok().body(response);
     }
 
-    @GetMapping("/{postId}")
-    public ResponseEntity<?> findAllCommentsByPost(
-            @PathVariable("postId") UUID postId
+    @GetMapping
+    public ResponseEntity<?> findAllByPost(
+            @RequestParam(name = "post") UUID postId
     ) throws Exception {
         Map<String, Object> response = new HashMap<>();
 
@@ -90,6 +90,103 @@ public class CommentController {
 
         response.put("message", "Success on find all comments by post");
         response.put("data", commentResponseDTOList);
+        return ResponseEntity.ok().body(response);
+    }
+
+    @GetMapping("/{commentId}")
+    public ResponseEntity<?> getOne(
+            @PathVariable("commentId") UUID commentId
+    ) throws Exception {
+        Map<String, Object> response = new HashMap<>();
+
+        Optional<Comment> optionalComment = this.commentRepository.findById(commentId);
+        if (optionalComment.isEmpty()) {
+            response.put("message", "Comment not found");
+            return ResponseEntity.badRequest().body(response);
+        }
+        Comment comment = optionalComment.get();
+
+        response.put("message", "Success on get one comment");
+        response.put("data", new CommentResponseDTO(comment));
+        return ResponseEntity.ok().body(response);
+    }
+
+    @PutMapping("/{commentId}")
+    public ResponseEntity<?> update(
+            @RequestHeader(value = "Authorization", required = true) String token,
+            @PathVariable("commentId") UUID commentId,
+            @Valid @RequestBody CommentRequestDTO commentRequestDTO,
+            BindingResult bindingResult
+    ) throws Exception {
+        Map<String, Object> response = new HashMap<>();
+
+        if (bindingResult.hasErrors()) {
+            response.put("message", "Invalid request body");
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        Optional<Post> optionalPost = this.postRepository.findById(commentRequestDTO.getPostId());
+        if (optionalPost.isEmpty()) {
+            response.put("message", "Post not found");
+            return ResponseEntity.badRequest().body(response);
+        }
+        Post post = optionalPost.get();
+
+        Comment parentComment = null;
+        if (commentRequestDTO.getParentCommentId() != null) {
+            Optional<Comment> optionalParentComment = this.commentRepository.findById(commentRequestDTO.getParentCommentId());
+            if (optionalParentComment.isEmpty()) {
+                response.put("message", "Parent comment not found");
+                return ResponseEntity.badRequest().body(response);
+            }
+            parentComment = optionalParentComment.get();
+        }
+
+        Optional<Comment> optionalComment = this.commentRepository.findById(commentId);
+        if (optionalComment.isEmpty()) {
+            response.put("message", "Comment not found");
+            return ResponseEntity.badRequest().body(response);
+        }
+        Comment comment = optionalComment.get();
+
+        User user = this.jwtTokenService.getUserByToken(token);
+
+        if (user.getId() != comment.getUser().getId()) {
+            response.put("message", "Comment not found");
+            return ResponseEntity.status(401).body(response);
+        }
+
+        comment.setPost(post);
+        comment.setUser(user);
+        comment.setText(commentRequestDTO.getText());
+
+        if (commentRequestDTO.getParentCommentId() == null)
+            comment.setParentComment(null);
+        else
+            comment.setParentComment(parentComment);
+
+        this.commentRepository.save(comment);
+
+        response.put("message", "Success on update comment");
+        response.put("data", new CommentResponseDTO(comment));
+        return ResponseEntity.ok().body(response);
+    }
+
+    @DeleteMapping("/{commentId}")
+    public ResponseEntity<?> delete(
+            @PathVariable("commentId") UUID commentId
+    ) throws Exception {
+        Map<String, Object> response = new HashMap<>();
+
+        Optional<Comment> optionalComment = this.commentRepository.findById(commentId);
+        if (optionalComment.isEmpty()) {
+            response.put("message", "Comment not found");
+            return ResponseEntity.badRequest().body(response);
+        }
+        Comment comment = optionalComment.get();
+        this.commentRepository.delete(comment);
+
+        response.put("message", "Success on delete comment");
         return ResponseEntity.ok().body(response);
     }
 }
