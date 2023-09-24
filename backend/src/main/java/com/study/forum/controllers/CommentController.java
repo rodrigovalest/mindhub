@@ -2,8 +2,6 @@ package com.study.forum.controllers;
 
 import com.study.forum.dtos.comment.CommentRequestDTO;
 import com.study.forum.dtos.comment.CommentResponseDTO;
-import com.study.forum.dtos.post.PostRequestDTO;
-import com.study.forum.dtos.post.PostResponseDTO;
 import com.study.forum.models.Comment;
 import com.study.forum.models.Post;
 import com.study.forum.models.User;
