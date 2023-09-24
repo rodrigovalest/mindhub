@@ -36,6 +36,8 @@ public class JwtTokenService {
     }
 
     public String validate(String token) {
+        token = token.replace("Bearer ", "");
+
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
 

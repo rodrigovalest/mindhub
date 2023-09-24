@@ -1,4 +1,4 @@
-package com.study.forum.config.security;
+package com.study.forum.filters;
 
 import com.study.forum.repositories.UserRepository;
 import com.study.forum.services.JwtTokenService;

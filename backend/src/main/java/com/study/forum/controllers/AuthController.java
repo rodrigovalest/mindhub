@@ -15,17 +15,15 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/auth")
-public class UserController {
+public class AuthController {
 
     @Autowired
     private UserRepository userRepository;
@@ -97,5 +95,18 @@ public class UserController {
             response.put("message", "An internal error occurred");
             return ResponseEntity.internalServerError().body(response);
         }
+    }
+
+    @GetMapping("/validate")
+    public ResponseEntity<?> validateToken(@RequestHeader(value = "Authorization", required = true) String token) {
+        Map<String, Object> response = new HashMap<>();
+
+        if (Objects.equals(this.jwtTokenService.validate(token), "")) {
+            response.put("message", "Invalid token");
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        response.put("message", "Valid token");
+        return ResponseEntity.ok().body(response);
     }
 }
