@@ -1,3 +1,4 @@
+import Navbar from "../../components/Navbar";
 import Logo from "../../components/Logo";
 import InputType from "../../components/InputType";
 import InputSubmit from "../../components/InputSubmit";
@@ -59,7 +60,7 @@ export default function Signin() {
 
   return (
     <div className="w-full h-full">
-      <nav>
+      <nav className="flex justify-between items-center py-2 px-2">
         <Logo />
       </nav>
       <div className="h-5/6 flex justify-center items-center">

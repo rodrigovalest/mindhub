@@ -8,7 +8,7 @@ export default function PrivateRoute({ children }) {
 
   useEffect(() => {
     validateToken();
-  });
+  }, []);
 
   const validateToken = () => {
     fetch(`${apiUrl}/auth/validate`, {
