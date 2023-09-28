@@ -20,7 +20,7 @@ public class PostRequestDTO {
 
     @NotBlank
     @NotNull
-    private String text;
+    private String mdText;
 
     @NotNull
     private PostCategory category;
@@ -28,7 +28,7 @@ public class PostRequestDTO {
     public Post toPost() {
         Post post = new Post();
         post.setTitle(this.title);
-        post.setText(this.text);
+        post.setMdText(this.mdText);
         post.setCategory(this.category);
         return post;
     }
@@ -36,7 +36,7 @@ public class PostRequestDTO {
     public Post toPost(User user) {
         Post post = new Post();
         post.setTitle(this.title);
-        post.setText(this.text);
+        post.setMdText(this.mdText);
         post.setCategory(this.category);
         post.setUser(user);
         return post;

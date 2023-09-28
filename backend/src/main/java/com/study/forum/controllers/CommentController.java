@@ -65,7 +65,7 @@ public class CommentController {
         newComment.setUser(user);
         newComment.setPost(post);
         newComment.setParentComment(parentComment);
-        newComment.setText(commentRequestDTO.getText());
+        newComment.setMdText(commentRequestDTO.getMdText());
 
         response.put("message", "New post succesfully saved");
         response.put("data", new CommentResponseDTO(this.commentRepository.save(newComment)));
@@ -156,7 +156,7 @@ public class CommentController {
 
         comment.setPost(post);
         comment.setUser(user);
-        comment.setText(commentRequestDTO.getText());
+        comment.setMdText(commentRequestDTO.getMdText());
 
         if (commentRequestDTO.getParentCommentId() == null)
             comment.setParentComment(null);
