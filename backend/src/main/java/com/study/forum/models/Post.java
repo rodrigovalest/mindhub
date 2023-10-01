@@ -28,8 +28,8 @@ public class Post {
     @Column(nullable = false)
     private String title;
 
-    @Column(columnDefinition = "TEXT", nullable = false, name = "text")
-    private String text;
+    @Column(columnDefinition = "TEXT", nullable = false, name = "md_text")
+    private String mdText;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = true)

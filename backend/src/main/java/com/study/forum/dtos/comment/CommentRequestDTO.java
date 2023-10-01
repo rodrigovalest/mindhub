@@ -23,5 +23,5 @@ public class CommentRequestDTO {
 
     @NotBlank
     @NotNull
-    private String text;
+    private String mdText;
 }

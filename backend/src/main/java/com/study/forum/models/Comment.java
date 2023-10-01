@@ -32,8 +32,8 @@ public class Comment {
     @JoinColumn(name = "parent_comment_id", nullable = true)
     private Comment parentComment;
 
-    @Column(columnDefinition = "TEXT", nullable = false, name = "text")
-    private String text;
+    @Column(columnDefinition = "TEXT", nullable = false, name = "md_text")
+    private String mdText;
 
     @CreationTimestamp
     private LocalDateTime creationTimestamp;

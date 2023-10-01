@@ -3,6 +3,7 @@ package com.study.forum.dtos.comment;
 import com.study.forum.models.Comment;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @ToString
@@ -17,14 +18,16 @@ public class CommentResponseDTO {
     private String username;
     private UUID postId;
     private UUID parentCommentId;
-    private String text;
+    private String mdText;
+    private LocalDateTime creationTimestamp;
 
     public CommentResponseDTO(Comment comment) {
         this.id = comment.getId();
         this.userId = comment.getUser().getId();
         this.username = comment.getUser().getUsername();
         this.postId = comment.getPost().getId();
-        this.text = comment.getText();
+        this.mdText = comment.getMdText();
+        this.creationTimestamp = comment.getCreationTimestamp();
 
         if (comment.getParentComment() != null)
             this.parentCommentId = comment.getParentComment().getId();
