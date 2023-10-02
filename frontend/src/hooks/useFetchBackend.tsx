@@ -1,27 +1,21 @@
-interface IPropsUseFetchBackend {
-  method: string,
+interface IUseFetchBackend {
+  method: HttpMethod,
   path: string,
-  body?: Object,
 }
 
-export enum HTTPMethodEnum {
-  "POST",
-  "GET",
-  "PUT",
-  "DELETE",
-}
+type HttpMethod = "POST" | "GET" | "PUT" | "DELETE";
 
-export const useFetchBackend = ({ method, path, body }: IPropsUseFetchBackend) => {
+const useFetchBackend = ({ method, path }: IUseFetchBackend) => {
   const apiUrl = process.env.REACT_APP_API_URL;
 
-  const fetchData = async () => {
+  const fetchData = async (bodyData: any) => {
     try {
       const response = await fetch(`${apiUrl}/${path}`, {
         method: method,
         headers: {
           "Content-Type": "application/json",
         },
-        body: body ? JSON.stringify(body) : undefined,
+        body: bodyData ? JSON.stringify(bodyData) : undefined,
       })
 
       if (!response.ok)
@@ -31,9 +25,11 @@ export const useFetchBackend = ({ method, path, body }: IPropsUseFetchBackend) =
       
       return fetchedData;
     } catch (error) {
-      return "Something went wrong";
+      return new Error("Something went wrong");
     }
   };
 
   return fetchData;
 };
+
+export default useFetchBackend;

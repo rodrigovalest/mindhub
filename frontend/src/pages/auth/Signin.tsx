@@ -1,24 +1,33 @@
-import { useState } from "react";
-import { useFetchBackend } from "../../hooks/useFetchBackend";
+import { useForm } from "react-hook-form";
 
-const user = {
-  username: "",
-  password: "",
-};
+import useFetchBackend from "../../hooks/useFetchBackend";
+
 
 export const Signin = () => {
-  const [ data, setData ] = useState<string>("");
-  const fetchData = useFetchBackend({ method: "POST", path: "auth/signin", body: user });
+  const { register, handleSubmit, formState: { errors } } = useForm();
+  const fetchData = useFetchBackend({ method: "POST", path: "auth/signin" });
 
-  const callData = async () => {
-    const fetchedData = await fetchData();
-    setData(fetchedData);
-  }
+  const fetchCredentials = async (credentials: any) => {
+    const fetchedData = await fetchData(credentials);
+  
+    if (fetchedData instanceof Error) {
+      console.log(fetchedData)
+    }
+
+    localStorage.setItem("token", fetchedData.data);
+  };
 
   return (
-    <div className="bg-white">
-      <h1>Hello World!</h1>
-      <button onClick={callData}>Fetch data</button>
-    </div>
+    <form onSubmit={handleSubmit(fetchCredentials)}>
+      <input
+        type="text"
+        {...register("username")}
+      />
+      <input
+        type="password"
+        {...register("password")}
+      />
+      <input type="submit" />
+    </form>
   );
-}
+};

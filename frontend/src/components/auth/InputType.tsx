@@ -1,13 +1,30 @@
-interface IPropsInputSubmit {
-  text: string
+import { FieldError, UseFormRegister } from "react-hook-form"
+
+interface IPropsInputType {
+  type: string,
+  fieldName: string,
+  register: UseFormRegister<any>,
+  error?: FieldError,
 }
 
-export const InputSubmit: React.FC<IPropsInputSubmit> = ({ text }) => {
+const InputType: React.FC<IPropsInputType> = ({ type, fieldName, register, error }) => {
   return (
-    <input
-      type="submit"
-      className="font-light rounded text-white bg-indigo-600 hover:bg-indigo-500 py-2 px-4 w-full my-2 hover:cursor-pointer"
-      placeholder={text}
-    />
-  );
+    <div className="w-full pb-5">
+      <label className="w-full pb-2 block text-white font-medium first-letter:uppercase">
+        {fieldName}
+      </label>
+      <input
+        type={type}
+        className="w-full h-9 border-indigo-600 border-2 rounded bg-base text-white pl-1 font-light"
+        {...register(fieldName)}
+        autoComplete="off"
+        autoCorrect="off"
+      />
+      <p className="text-red-500 text-sm mt-1 first-letter:uppercase">
+        {error && error.message}
+      </p>
+    </div>
+  )
 }
+
+export default InputType;
