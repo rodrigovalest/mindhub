@@ -1,24 +1,24 @@
-import { useFetch } from "../../hooks/useFetch";
+import { useState } from "react";
+import { useFetchBackend } from "../../hooks/useFetchBackend";
 
 const user = {
-  username: "user",
-  password: "123mudar",
+  username: "",
+  password: "",
 };
 
 export const Signin = () => {
-  const fetchData = useFetch({ method: "POST", path: "auth/signin", body: user });
+  const [ data, setData ] = useState<string>("");
+  const fetchData = useFetchBackend({ method: "POST", path: "auth/signin", body: user });
 
   const callData = async () => {
     const fetchedData = await fetchData();
-
-    if (fetchedData && fetchedData.data) {
-      localStorage.setItem("token", fetchedData.data);
-    }
+    setData(fetchedData);
   }
 
   return (
     <div className="bg-white">
       <h1>Hello World!</h1>
+      <button onClick={callData}>Fetch data</button>
     </div>
   );
 }
