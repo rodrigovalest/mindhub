@@ -9,7 +9,6 @@ interface PrivateRouteProps {
 
 export const PrivateRoute = ({ children }: PrivateRouteProps) => {
   const navigate = useNavigate();
-  const [isTokenValid, setIsTokenValid] = useState<boolean | null>(null);
   const fetchData = useFetchBackend({ method: "GET", path: "auth/validate" });
 
   useEffect(() => {
@@ -21,18 +20,9 @@ export const PrivateRoute = ({ children }: PrivateRouteProps) => {
 
     if (fetchedData instanceof Error) {
       localStorage.removeItem("token");
-      console.log(fetchedData);
-      setIsTokenValid(false);
-    } else {
-      console.log(fetchedData);
-      setIsTokenValid(true);
+      navigate("/auth/signin");
     }
   };
 
-  if (isTokenValid === true) {
-    return <>{children}</>;
-  } else {
-    navigate("/auth/signin");
-    return null;
-  }
+  return <>{children}</>;
 };

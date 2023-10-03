@@ -1,5 +1,9 @@
+import Navbar from "../components/shared/Navbar";
+
 export const Home = () => {
   return (
-    <h1>Homepage</h1>
+    <div className="w-full h-full">
+      <Navbar />
+    </div>
   );
 }
