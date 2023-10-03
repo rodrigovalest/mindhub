@@ -13,12 +13,12 @@ const registerSchema = yup.object().shape({
     .string()
     .min(3)
     .max(255)
-    .required(),
+    .required("Username is required"),
   password: yup
     .string()
     .min(5)
     .max(255)
-    .required()
+    .required("Password is required")
 });
 
 
@@ -32,7 +32,7 @@ export const Signin = () => {
 
     if (fetchedData instanceof Error) {
       localStorage.removeItem("token");
-      console.log(fetchedData)
+      alert("Invalid credentials. Try again!");
     } else {
       localStorage.setItem("token", fetchedData.data);
       navigate("/");

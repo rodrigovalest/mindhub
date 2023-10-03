@@ -18,14 +18,19 @@ const useFetchBackend = ({ method, path }: IUseFetchBackend) => {
         body: bodyData ? JSON.stringify(bodyData) : undefined,
       })
 
-      if (!response.ok)
+      if (!response.ok) {
+        const fetchedData = await response.json();
+
+        if (fetchedData.message)
+          throw new Error(fetchedData.message);
+
         throw new Error("Something went wrong");
+      }
 
       const fetchedData = await response.json();
-      
       return fetchedData;
     } catch (error) {
-      return new Error("Something went wrong");
+      return error;
     }
   };
 
