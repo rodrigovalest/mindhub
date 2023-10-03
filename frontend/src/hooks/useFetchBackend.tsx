@@ -8,13 +8,20 @@ type HttpMethod = "POST" | "GET" | "PUT" | "DELETE";
 const useFetchBackend = ({ method, path }: IUseFetchBackend) => {
   const apiUrl = process.env.REACT_APP_API_URL;
 
-  const fetchData = async (bodyData: any) => {
+  const fetchData = async (bodyData: any | null) => {    
+    const headerData: HeadersInit | undefined = localStorage.getItem("token")
+    ? {
+        "Content-Type": "application/json",
+        "Authorization": String(localStorage.getItem("token")),
+      }
+    : {
+        "Content-Type": "application/json",
+      };
+
     try {
       const response = await fetch(`${apiUrl}/${path}`, {
         method: method,
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: headerData,
         body: bodyData ? JSON.stringify(bodyData) : undefined,
       })
 

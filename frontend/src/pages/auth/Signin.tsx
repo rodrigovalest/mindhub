@@ -32,7 +32,7 @@ export const Signin = () => {
     if (localStorage.getItem("token") != null) {
       navigate("/");
     }
-  });
+  }, []);
 
   const fetchCredentials = async (credentials: any) => {
     const fetchedData = await fetchData(credentials);

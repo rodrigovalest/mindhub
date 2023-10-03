@@ -1,6 +1,6 @@
 import { Navigate } from "react-router-dom";
 
-export default function Signout() {
+export const Signout = () => {
   localStorage.removeItem("token");
 
   return (
