@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
@@ -26,6 +27,12 @@ export const Signin = () => {
   const navigate = useNavigate();
   const { register, handleSubmit, formState: { errors } } = useForm({ resolver: yupResolver(registerSchema) });
   const fetchData = useFetchBackend({ method: "POST", path: "auth/signin" });
+
+  useEffect(() => {
+    if (localStorage.getItem("token") != null) {
+      navigate("/");
+    }
+  });
 
   const fetchCredentials = async (credentials: any) => {
     const fetchedData = await fetchData(credentials);
