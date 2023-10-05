@@ -17,7 +17,7 @@ body,
     background-color: #1E1E1E;
 }
 
-/* Render md */
+/* .renderMd class to customize the generated html from markdown text */
 
 .renderMd h1 {
     display: block;
