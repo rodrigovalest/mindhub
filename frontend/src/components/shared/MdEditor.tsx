@@ -8,7 +8,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 
 interface IMdEditor {
   state: string,
-  setState: React.Dispatch<React.SetStateAction<string>>
+  setState: React.Dispatch<React.SetStateAction<string>>,
 }
 
 
@@ -32,7 +32,7 @@ const MdEditor = ({ state, setState }: IMdEditor) => {
       options={options}
       value={state}
       onChange={onChange}
-      className="w-2/3 bg-white rounded-md block"
+      className="bg-white rounded-md block"
     />
   );
 }
