@@ -42,21 +42,6 @@ public class PostController {
         return ResponseEntity.ok().body(response);
     }
 
-    @GetMapping("/teste")
-    public ResponseEntity<?> findPostsOrderBy() throws Exception {
-        Map<String, Object> response = new HashMap<>();
-
-        List<Post> postList = this.postRepository.findAll();
-        List<PostResponseDTO> postResponseDTOList = new ArrayList<>();
-
-        for (Post post : postList)
-            postResponseDTOList.add(new PostResponseDTO(post));
-
-        response.put("message", "Success in finding all posts");
-        response.put("data", postResponseDTOList);
-        return ResponseEntity.ok().body(response);
-    }
-
     @PostMapping
     public ResponseEntity<?> savePost(
             @RequestHeader(value = "Authorization", required = true) String token,
