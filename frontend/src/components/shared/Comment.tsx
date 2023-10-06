@@ -1,27 +1,21 @@
 import ReactMarkdown from "react-markdown";
-import { IComment } from "../posts/CommentsSection";
+import { ISchemaComment } from "../posts/CommentsSection";
 
-interface PropsComment {
+interface IComment {
   key?: number,
-  comment: IComment,
+  className?: string,
+  comment: ISchemaComment,
 }
 
-const Comment = ({ comment }: PropsComment) => {
+const Comment = ({ comment, className }: IComment) => {
   return (
-    <div key={comment.id}>
-      <p>ID: {comment.id}</p>
-      <p>User ID: {comment.userId}</p>
-      <p>Username: {comment.username}</p>
-      <p>Post ID: {comment.postId}</p>
+    <div key={comment.id} className={`${className}`}>
       <ReactMarkdown>{comment.mdText}</ReactMarkdown>
-      <p>Parent Comment ID: {comment.parentCommentId}</p>
 
       {comment.children && comment.children.length > 0 && (
-        <div style={{ marginLeft: '20px' }}>
-          {comment.children.map((childComment, index) => (
-            <Comment key={index} comment={childComment} />
-          ))}
-        </div>
+        comment.children.map((childComment, index) => (
+          <Comment key={index} comment={childComment} className={`${className} pl-4 pt-4`} />
+        ))
       )}
     </div>
   );

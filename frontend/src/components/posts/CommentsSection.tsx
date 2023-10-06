@@ -1,21 +1,19 @@
-import ReactMarkdown from "react-markdown";
-
 import useFetchBackend from "../../hooks/useFetchBackend";
 import { useEffect, useState } from "react";
 import Comment from "../shared/Comment";
 
-export interface IComment {
+export interface ISchemaComment {
   id: string;
   userId: string;
   username: string;
   postId: string;
   mdText: string,
   parentCommentId: string | null;
-  children?: IComment[];
+  children?: ISchemaComment[];
 }
 
-const toTreeOfComments = (comments: IComment[]) => {
-  const searchParentComment = (parentCommentId: string): IComment | null => {
+const toTreeOfComments = (comments: ISchemaComment[]) => {
+  const searchParentComment = (parentCommentId: string): ISchemaComment | null => {
     for (const comment of comments) {
       if (comment.id === parentCommentId) {
         return comment;
@@ -24,9 +22,9 @@ const toTreeOfComments = (comments: IComment[]) => {
     return null;
   }
 
-  const rootComments: IComment[] = [];
+  const rootComments: ISchemaComment[] = [];
 
-  comments.forEach((comment: IComment) => {
+  comments.forEach((comment: ISchemaComment) => {
     if (!comment.parentCommentId) {
       rootComments.push(comment);
     } else {
@@ -45,7 +43,7 @@ const toTreeOfComments = (comments: IComment[]) => {
 
 const CommentSection = () => {
   const fetchData = useFetchBackend({ method: "GET", path: `/comments?post=${window.location.pathname.split("/")[2]}` });
-  const [comments, setComments] = useState<IComment[]>([]);
+  const [comments, setComments] = useState<ISchemaComment[]>([]);
 
   const fetchComment = async () => {
     const fetchedData = await fetchData(null);
@@ -53,8 +51,7 @@ const CommentSection = () => {
     if (fetchedData instanceof Error) {
       alert("Comments loading failed, went wrong!");
     } else {
-      toTreeOfComments(fetchedData.data);
-      setComments(fetchedData.data);
+      setComments(toTreeOfComments(fetchedData.data));
     }
   };
 
@@ -63,11 +60,15 @@ const CommentSection = () => {
   }, []);
 
   return (
-    <div className="text-white">
-      {comments.map((comment: IComment, index: number) => (
-        <Comment key={index} comment={comment} />
-      ))}
-    </div>
+    <section className="text-white flex justify-center">
+      <div className="w-2/3 mt-12 mb-10">
+        {comments.map((comment: ISchemaComment, index: number) => (
+          <div className="bg-softbase rounded-md p-4 my-4">
+            <Comment key={index} comment={comment} />
+          </div>
+        ))}
+      </div>
+    </section>
   );
 }
 
