@@ -13,7 +13,7 @@ export const NewPost = () => {
   const [text, setText] = useState<string>("");
   const [title, setTitle] = useState<string>("");
   const [category, setCategory] = useState("");
-  const fetchData = useFetchBackend({ method: "POST", path: "posts" });
+  const fetchData = useFetchBackend({ method: "POST", path: "/posts" });
 
   const onTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newTitle = event.target.value;

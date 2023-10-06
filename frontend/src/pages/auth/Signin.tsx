@@ -26,7 +26,7 @@ const registerSchema = yup.object().shape({
 export const Signin = () => {
   const navigate = useNavigate();
   const { register, handleSubmit, formState: { errors } } = useForm({ resolver: yupResolver(registerSchema) });
-  const fetchData = useFetchBackend({ method: "POST", path: "auth/signin" });
+  const fetchData = useFetchBackend({ method: "POST", path: "/auth/signin" });
 
   useEffect(() => {
     if (localStorage.getItem("token") != null) {

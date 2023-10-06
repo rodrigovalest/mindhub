@@ -9,7 +9,7 @@ interface PrivateRouteProps {
 
 export const PrivateRoute = ({ children }: PrivateRouteProps) => {
   const navigate = useNavigate();
-  const fetchData = useFetchBackend({ method: "GET", path: "auth/validate" });
+  const fetchData = useFetchBackend({ method: "GET", path: "/auth/validate" });
 
   useEffect(() => {
     fetchValidate();

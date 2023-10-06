@@ -1,5 +1,5 @@
 import Navbar from "../components/shared/Navbar";
-import PreviewPostSection from "../components/home/PreviewPostsSection";
+import PreviewPostSection from "../components/shared/PreviewPosts/PreviewPostsSection";
 
 export const Home = () => {
   return (

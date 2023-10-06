@@ -19,7 +19,7 @@ const useFetchBackend = ({ method, path }: IUseFetchBackend) => {
       };
 
     try {
-      const response = await fetch(`${apiUrl}/${path}`, {
+      const response = await fetch(`${apiUrl}${path}`, {
         method: method,
         headers: headerData,
         body: bodyData ? JSON.stringify(bodyData) : undefined,
