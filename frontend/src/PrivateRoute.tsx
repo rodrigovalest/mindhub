@@ -11,10 +11,6 @@ export const PrivateRoute = ({ children }: PrivateRouteProps) => {
   const navigate = useNavigate();
   const fetchData = useFetchBackend({ method: "GET", path: "/auth/validate" });
 
-  useEffect(() => {
-    fetchValidate();
-  }, []);
-
   const fetchValidate = async () => {
     const fetchedData = await fetchData(null);
 
@@ -23,6 +19,10 @@ export const PrivateRoute = ({ children }: PrivateRouteProps) => {
       navigate("/auth/signin");
     }
   };
+
+  useEffect(() => {
+    fetchValidate();
+  }, []);
 
   return <>{children}</>;
 };

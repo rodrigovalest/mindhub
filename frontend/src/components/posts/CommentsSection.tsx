@@ -61,11 +61,9 @@ const CommentSection = () => {
 
   return (
     <section className="text-white flex justify-center">
-      <div className="w-2/3 mt-12 mb-10">
+      <div className="w-2/3 mt-8 mb-10 bg-softbase rounded pt-4 pb-8 px-8">
         {comments.map((comment: ISchemaComment, index: number) => (
-          <div className="bg-softbase rounded-md p-4 my-4">
-            <Comment key={index} comment={comment} />
-          </div>
+          <Comment key={index} comment={comment} />
         ))}
       </div>
     </section>
