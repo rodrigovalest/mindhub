@@ -42,11 +42,11 @@ export const NewPost = () => {
       <Navbar />
 
       <section className="flex justify-center mt-20">
-        <div className="bg-softbase w-2/3 p-10 pb-4 rounded-lg">
+        <div className="bg-softbase w-5/6 sm:w-2/3 p-10 pb-4 rounded-lg">
           <div className="flex justify-between items-center">
             <input
               type="text"
-              className="my-2 mr-2 rounded-md w-2/3 px-2 py-0.5 h-8"
+              className="my-2 mr-2 rounded-md px-2 py-0.5 h-8"
               placeholder="Insert post title..."
               name="title"
               onChange={onTitleChange}
@@ -59,7 +59,7 @@ export const NewPost = () => {
           <MdEditor state={text} setState={setText} />
           <Button 
             text="Post" 
-            className="w-40"
+            className="w-40 mt-6 mb-2"
             onClick={submitNewPost}
           />
         </div>

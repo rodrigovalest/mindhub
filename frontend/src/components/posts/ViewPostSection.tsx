@@ -50,7 +50,7 @@ const ViewPostSection = () => {
   return (
     <section>
       <div className="flex justify-center">
-        <div className="w-2/3 mt-12 mb-5">
+        <div className="w-5/6 sm:w-2/3 mt-12 mb-5">
           <div className="flex justify-between items-center pb-6">
             <h2 className="text-indigo-500 text-2xl font-bold pb-2">
               {post.title}

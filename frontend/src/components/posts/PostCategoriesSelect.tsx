@@ -38,7 +38,7 @@ const PostCategoriesSelect = ({ className, state, setState }: IPostCategoriesSel
 
   return (
     <select 
-      className={`${className} rounded-md`}
+      className={`${className} rounded-md w-full`}
       value={state}
       onChange={handleCategoryChange}
     >
