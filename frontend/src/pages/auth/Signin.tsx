@@ -1,61 +1,49 @@
-import Navbar from "../../components/Navbar";
-import Logo from "../../components/Logo";
-import InputType from "../../components/InputType";
-import InputSubmit from "../../components/InputSubmit";
 import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from '@hookform/resolvers/yup';
 
+import useFetchBackend from "../../hooks/useFetchBackend";
+import InputSubmit from "../../components/auth/InputSubmit";
+import InputType from "../../components/auth/InputType";
+import Logo from "../../components/shared/Logo";
+
 const registerSchema = yup.object().shape({
   username: yup
-    .string("Username field invalid")
+    .string()
     .min(3)
     .max(255)
-    .required(),
+    .required("Username is required"),
   password: yup
-    .string("Password field invalid")
+    .string()
     .min(5)
     .max(255)
-    .required()
+    .required("Password is required")
 });
 
-export default function Signin() {
-  const apiUrl = process.env.REACT_APP_API_URL;
+
+export const Signin = () => {
   const navigate = useNavigate();
-  const { register, handleSubmit, formState: { errors } } = useForm({
-    resolver: yupResolver(registerSchema)
-  });
+  const { register, handleSubmit, formState: { errors } } = useForm({ resolver: yupResolver(registerSchema) });
+  const fetchData = useFetchBackend({ method: "POST", path: "/auth/signin" });
 
   useEffect(() => {
-    if (localStorage.getItem("token") != null)
+    if (localStorage.getItem("token") != null) {
       navigate("/");
-  });
+    }
+  }, []);
 
-  const onSubmitForm = (credentials) => {
-    fetch(`${apiUrl}/auth/signin`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(credentials)
-    })
-      .then(async (res) => {
-        if (!res.ok) {
-          const errorData = await res.json();
-          throw new Error(errorData.message);
-        }
-        return res.json();
-      })
-      .then((data) => {
-        localStorage.setItem("token", data.data);
-        navigate("/");
-      })
-      .catch((err) => {
-        localStorage.removeItem("token");
-        alert(`Error: ${err.message}`);
-      });
+  const fetchCredentials = async (credentials: any) => {
+    const fetchedData = await fetchData(credentials);
+
+    if (fetchedData instanceof Error) {
+      localStorage.removeItem("token");
+      alert("Invalid credentials. Try again!");
+    } else {
+      localStorage.setItem("token", fetchedData.data);
+      navigate("/");
+    }
   };
 
   return (
@@ -66,10 +54,10 @@ export default function Signin() {
       <div className="h-5/6 flex justify-center items-center">
         <div className="w-72">
           <h1 className="pb-6 text-4xl font-bold text-white">Sign in</h1>
-          <form onSubmit={handleSubmit(onSubmitForm)}>
+          <form onSubmit={handleSubmit(fetchCredentials)}>
             <InputType
               type={"text"}
-              fieldName="username"
+              fieldName={"username"}
               register={register}
               error={errors.username}
             />
@@ -92,5 +80,5 @@ export default function Signin() {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};

@@ -1,4 +1,13 @@
-export default function InputType({ type, fieldName, register, error }) {
+import { FieldError, UseFormRegister } from "react-hook-form"
+
+interface IPropsInputType {
+  type: string,
+  fieldName: string,
+  register: UseFormRegister<any>,
+  error?: FieldError,
+}
+
+const InputType: React.FC<IPropsInputType> = ({ type, fieldName, register, error }) => {
   return (
     <div className="w-full pb-5">
       <label className="w-full pb-2 block text-white font-medium first-letter:uppercase">
@@ -17,3 +26,5 @@ export default function InputType({ type, fieldName, register, error }) {
     </div>
   )
 }
+
+export default InputType;

@@ -1,16 +1,17 @@
-import Navbar from "../../components/Navbar";
-import Logo from "../../components/Logo";
-import InputType from "../../components/InputType";
-import InputSubmit from "../../components/InputSubmit";
+import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { useEffect } from "react";
 import * as yup from "yup";
 import { yupResolver } from '@hookform/resolvers/yup';
 
+import useFetchBackend from "../../hooks/useFetchBackend";
+import InputSubmit from "../../components/auth/InputSubmit";
+import InputType from "../../components/auth/InputType";
+import Logo from "../../components/shared/Logo";
+
 const registerSchema = yup.object().shape({
   username: yup
-    .string("Username field invalid")
+    .string()
     .min(3)
     .max(255)
     .required("Username is required"),
@@ -19,46 +20,34 @@ const registerSchema = yup.object().shape({
     .email()
     .required("Email is required"),
   password: yup
-    .string("Password field invalid")
+    .string()
     .min(5)
     .max(255)
     .required("Password is required")
 });
 
-export default function Signup() {
-  const apiUrl = process.env.REACT_APP_API_URL;
+
+export const Signup = () => {
   const navigate = useNavigate();
-  const { register, handleSubmit, formState: { errors } } = useForm({
-    resolver: yupResolver(registerSchema)
-  });
+  const { register, handleSubmit, formState: { errors } } = useForm({ resolver: yupResolver(registerSchema) });
+  const fetchData = useFetchBackend({ method: "POST", path: "/auth/signup" });
 
   useEffect(() => {
-    if (localStorage.getItem("token") != null)
+    if (localStorage.getItem("token") != null) {
       navigate("/");
+    }
   });
 
-  const onSubmitForm = (credentials) => {
-    fetch(`${apiUrl}/auth/signup`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(credentials)
-    })
-      .then(async (res) => {
-        if (!res.ok) {
-          const errorData = await res.json();
-          throw new Error(errorData.message);
-        }
-        return res.json();
-      })
-      .then((data) => {
-        alert("Account succesfully created")
-        navigate("/auth/signin");
-      })
-      .catch((err) => {
-        alert(`Error: ${err.message}`);
-      });
+  const fetchCredentials = async (credentials: any) => {
+    const fetchedData = await fetchData(credentials);
+
+    if (fetchedData instanceof Error) {
+      localStorage.removeItem("token");
+      alert(fetchedData);
+    } else {
+      alert("Account sucefully created!");
+      navigate("/auth/signin");
+    }
   };
 
   return (
@@ -69,10 +58,10 @@ export default function Signup() {
       <div className="h-5/6 flex justify-center items-center">
         <div className="w-72">
           <h1 className="pb-6 text-4xl font-bold text-white">Sign up</h1>
-          <form onSubmit={handleSubmit(onSubmitForm)}>
+          <form onSubmit={handleSubmit(fetchCredentials)}>
             <InputType
               type={"text"}
-              fieldName="username"
+              fieldName={"username"}
               register={register}
               error={errors.username}
             />
@@ -88,7 +77,9 @@ export default function Signup() {
               register={register}
               error={errors.password}
             />
-            <InputSubmit text="Create account" />
+            <InputSubmit 
+              text="Create account" 
+            />
           </form>
           <Link
             to="/auth/signin"
@@ -100,4 +91,4 @@ export default function Signup() {
       </div>
     </div>
   );
-}
+};

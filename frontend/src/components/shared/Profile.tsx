@@ -1,6 +1,4 @@
-import { Link } from "react-router-dom";
-
-export default function Profile() {
+const Profile = () => {
   // Puxar foto de perfil do banco de dados
 
   return (
@@ -9,3 +7,5 @@ export default function Profile() {
     </div>
   );
 }
+
+export default Profile;
