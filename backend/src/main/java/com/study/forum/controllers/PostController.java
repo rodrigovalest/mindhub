@@ -41,10 +41,15 @@ public class PostController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<?> findByPostName(
+    public ResponseEntity<?> findAllPostsByTitle(
             @RequestParam(name = "q") String postTitle
     ) throws Exception {
         Map<String, Object> response = new HashMap<>();
+
+        if (postTitle.isEmpty()) {
+            response.put("message", "Post title param cannot be blank");
+            return ResponseEntity.badRequest().body(response);
+        }
 
         List<Post> postList = this.postRepository.findByTitleContaining(postTitle);
         List<PostResponseDTO> postResponseDTOList = new ArrayList<>();
@@ -52,7 +57,7 @@ public class PostController {
         for (Post post : postList)
             postResponseDTOList.add(new PostResponseDTO(post));
 
-        response.put("message", "Success in finding posts containing " + postTitle + " in title");
+        response.put("message", "Success in finding all posts");
         response.put("data", postResponseDTOList);
         return ResponseEntity.ok().body(response);
     }
