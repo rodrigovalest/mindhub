@@ -32,12 +32,27 @@ public class PostController {
         List<Post> postList = this.postRepository.findAll();
         List<PostResponseDTO> postResponseDTOList = new ArrayList<>();
 
-        System.out.println(postList.toString());
-
         for (Post post : postList)
             postResponseDTOList.add(new PostResponseDTO(post));
 
         response.put("message", "Success in finding all posts");
+        response.put("data", postResponseDTOList);
+        return ResponseEntity.ok().body(response);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<?> findByPostName(
+            @RequestParam(name = "q") String postTitle
+    ) throws Exception {
+        Map<String, Object> response = new HashMap<>();
+
+        List<Post> postList = this.postRepository.findByTitleContaining(postTitle);
+        List<PostResponseDTO> postResponseDTOList = new ArrayList<>();
+
+        for (Post post : postList)
+            postResponseDTOList.add(new PostResponseDTO(post));
+
+        response.put("message", "Success in finding posts containing " + postTitle + " in title");
         response.put("data", postResponseDTOList);
         return ResponseEntity.ok().body(response);
     }
@@ -57,9 +72,6 @@ public class PostController {
 
         User user = this.jwtTokenService.getUserByToken(token);
         Post newPost = postRequestDTO.toPost(user);
-
-        System.out.println(postRequestDTO.toString());
-        System.out.println(newPost.toString());
 
         PostResponseDTO postResponseDTO = new PostResponseDTO(this.postRepository.save(newPost));
         response.put("message", "New post succesfully saved");
