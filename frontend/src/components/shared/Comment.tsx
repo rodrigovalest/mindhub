@@ -24,7 +24,7 @@ const Comment = ({ comment, className }: IComment) => {
       parentCommentId: comment.parentCommentId,
       mdText: commentText
     }
-    
+
     const fetchedData = await fetchComment(newComment);
 
     if (fetchedData instanceof Error) {
@@ -38,11 +38,11 @@ const Comment = ({ comment, className }: IComment) => {
   return (
     <>
       <div className="flex justify-start items-center py-5">
-        <Link to={`/profile/${comment.userId}`} className="inline-block bg-indigo-600 rounded-full h-10 w-10">
+        <Link to={`/users/${comment.username}`} className="inline-block bg-indigo-600 rounded-full h-10 w-10">
 
         </Link>
-        <Link to={`/profile/${comment.userId}`} className="inline-block text-white pl-4 hover:underline">
-          username
+        <Link to={`/users/${comment.username}`} className="inline-block text-white pl-4 hover:underline">
+          {comment.username}
         </Link>
       </div>
 
@@ -53,17 +53,17 @@ const Comment = ({ comment, className }: IComment) => {
           <ReactMarkdown className="renderMd text-white">{comment.mdText}</ReactMarkdown>
 
           <div className="mb-10">
-          {!isCommenting && (
-            <Button text="Comment" onClick={() => setIsCommenting(true)} />
-          )}
-          {isCommenting && (
-            <div className="mt-4 text-black">
-              <MdEditor state={commentText} setState={setCommentText} />
-              <Button text="Cancel" onClick={() => setIsCommenting(false)} className="mr-3" />
-              <Button text="Comment" onClick={() => doFetchComment()} className="" />
-            </div>
-          )}
-        </div>
+            {!isCommenting && (
+              <Button text="Comment" onClick={() => setIsCommenting(true)} />
+            )}
+            {isCommenting && (
+              <div className="mt-4 text-black">
+                <MdEditor state={commentText} setState={setCommentText} />
+                <Button text="Cancel" onClick={() => setIsCommenting(false)} className="mr-3" />
+                <Button text="Comment" onClick={() => doFetchComment()} className="" />
+              </div>
+            )}
+          </div>
 
           {comment.children && comment.children.length > 0 && (
             comment.children.map((childComment, index) => (

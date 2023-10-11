@@ -12,9 +12,9 @@ import lombok.*;
 public class UserUpdateDTO {
     @NotNull
     @NotBlank
-    private String newUsername;
+    private String username;
 
     @NotNull
     @NotBlank
-    private String newEmail;
+    private String email;
 }

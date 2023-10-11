@@ -22,7 +22,6 @@ const registerSchema = yup.object().shape({
     .required("Password is required")
 });
 
-
 export const Signin = () => {
   const navigate = useNavigate();
   const { register, handleSubmit, formState: { errors } } = useForm({ resolver: yupResolver(registerSchema) });

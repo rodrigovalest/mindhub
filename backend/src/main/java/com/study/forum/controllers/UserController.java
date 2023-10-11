@@ -73,20 +73,20 @@ public class UserController {
         }
         User user = (User) this.userRepository.findByUsername(username);
 
-        if (this.userRepository.findByUsername(userUpdateDTO.getNewUsername()) != null
-            && !userUpdateDTO.getNewUsername().equals(user.getUsername())) {
+        if (this.userRepository.findByUsername(userUpdateDTO.getUsername()) != null
+            && !userUpdateDTO.getUsername().equals(user.getUsername())) {
             response.put("message", "This username is already been used");
             return ResponseEntity.badRequest().body(response);
         }
 
-        if (this.userRepository.findByUsername(userUpdateDTO.getNewEmail()) != null
-            && !userUpdateDTO.getNewEmail().equals(user.getEmail())) {
+        if (this.userRepository.findByUsername(userUpdateDTO.getEmail()) != null
+            && !userUpdateDTO.getEmail().equals(user.getEmail())) {
             response.put("message", "This email is already been used");
             return ResponseEntity.badRequest().body(response);
         }
 
-        user.setUsername(userUpdateDTO.getNewUsername());
-        user.setEmail(userUpdateDTO.getNewEmail());
+        user.setUsername(userUpdateDTO.getUsername());
+        user.setEmail(userUpdateDTO.getEmail());
 
         UserResponseDTO userResponseDTO = new UserResponseDTO(this.userRepository.save(user));
 
