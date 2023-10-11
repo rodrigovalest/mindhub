@@ -10,42 +10,30 @@ import InputSubmit from "../../components/auth/InputSubmit";
 import useFetchBackend from "../../hooks/useFetchBackend";
 
 const credentialsSchema = yup.object().shape({
-  username: yup
+  newPassword: yup
     .string()
-    .min(3)
+    .min(5)
     .max(255)
-    .required("Username is required"),
-  email: yup
+    .required("New password is required"),
+  oldPassword: yup
     .string()
-    .email()
-    .required("Email is required"),
+    .min(5)
+    .max(255)
+    .required("Old password is required")
 });
 
-interface IUser {
-  username: string,
-  email: string,
-}
-
-export const ChangeProfile = () => {
+export const ChangePassword = () => {
   const navigate = useNavigate();
-  const [user, setUser] = useState<IUser>({} as IUser);
   const { register, handleSubmit, formState: { errors } } = useForm({ resolver: yupResolver(credentialsSchema) });
-  const fetchUser = useFetchBackend({ method: "GET", path: "/user" });
-  const fetchChanges = useFetchBackend({ method: "PUT", path: "/user/change" });
-
-  const fetchUserData = async () => {
-    const fetchedData = await fetchUser(null);
-
-    if (fetchedData instanceof Error) {
-      alert("Invalid token!");
-      localStorage.removeItem("token");
-      navigate("/auth/signin");
-    } else {
-      setUser(fetchedData.data);
-    }
-  }
+  const fetchChanges = useFetchBackend({ method: "PUT", path: "/user/change/password" });
 
   const fetchCredentials = async (credentials: any) => {
+    // const passwordData = {
+    //   newPassword: credentials.
+    // }
+
+    console.log(credentials)
+
     const fetchedData = await fetchChanges(credentials);
 
     if (fetchedData instanceof Error) {
@@ -56,41 +44,35 @@ export const ChangeProfile = () => {
     }
   };
 
-  useEffect(() => {
-    fetchUserData();
-  }, []);
-
   return (
     <div className="w-full h-full">
       <Navbar />
 
       <div className="flex justify-center">
         <div className="mb-10 mt-32 w-5/6 sm:w-2/5">
-          <h1 className="pb-6 text-4xl font-bold text-white">Change profile</h1>
+          <h1 className="pb-6 text-4xl font-bold text-white">Change password</h1>
           <form onSubmit={handleSubmit(fetchCredentials)} className="pb-2">
             <InputType
-              type="text"
-              fieldName="username"
+              type="password"
+              fieldName="newPassword"
               register={register}
-              defaultValue={user.username}
-              error={errors.username}
+              error={errors.newPassword}
             />
             <InputType
-              type="email"
-              fieldName="email"
+              type="password"
+              fieldName="oldPassword"
               register={register}
-              defaultValue={user.email}
-              error={errors.email}
+              error={errors.oldPassword}
             />
             <InputSubmit
               text="Save changes"
             />
           </form>
           <Link
-            to="/profile/password"
-            className="text-indigo-500 my-2 underline hover:text-indigo-300 hover:cursor-pointer"
+            to="/profile"
+            className="text-indigo-500 my-4 underline hover:text-indigo-300 hover:cursor-pointer"
           >
-            Change password
+            Change username and email
           </Link>
         </div>
       </div>

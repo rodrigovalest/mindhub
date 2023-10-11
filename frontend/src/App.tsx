@@ -11,6 +11,7 @@ import { NewPost } from "./pages/posts/NewPost";
 import { ViewPost } from "./pages/posts/ViewPost";
 
 import { ChangeProfile } from "./pages/profile/ChangeProfile";
+import { ChangePassword } from "./pages/profile/ChangePassword";
 
 import { ErrorNotFound } from "./pages/error/ErrorNotFound";
 
@@ -27,6 +28,7 @@ export default function App() {
           <Route path="/auth/signout" element={<Signout />} />
           <Route path="/posts/new" element={<PrivateRoute><NewPost /></PrivateRoute>} />
           <Route path="/posts/:id" element={<PrivateRoute><ViewPost /></PrivateRoute>} />
+          <Route path="/profile/password" element={<PrivateRoute><ChangePassword /></PrivateRoute>} />
           <Route path="/profile" element={<PrivateRoute><ChangeProfile /></PrivateRoute>} />
           <Route path="/" element={<PrivateRoute><Home /></PrivateRoute>} />
           <Route path="*" element={<ErrorNotFound />} />
