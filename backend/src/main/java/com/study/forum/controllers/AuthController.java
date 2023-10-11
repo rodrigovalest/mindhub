@@ -1,6 +1,5 @@
 package com.study.forum.controllers;
 
-import com.study.forum.dtos.user.UserResponseDTO;
 import com.study.forum.dtos.user.UserSigninDTO;
 import com.study.forum.dtos.user.UserSignupDTO;
 import com.study.forum.enums.UserRole;
@@ -40,7 +39,10 @@ public class AuthController {
 
 
     @PostMapping("/signup")
-    public ResponseEntity<?> signUp(@Valid @RequestBody UserSignupDTO userSignupDTO, BindingResult bindingResult) throws Exception {
+    public ResponseEntity<?> signUp(
+            @Valid @RequestBody UserSignupDTO userSignupDTO,
+            BindingResult bindingResult
+    ) throws Exception {
         Map<String, Object> response = new HashMap<>();
 
         if (bindingResult.hasErrors()) {
@@ -108,26 +110,6 @@ public class AuthController {
         }
 
         response.put("message", "Valid token");
-        return ResponseEntity.ok().body(response);
-    }
-
-    @GetMapping("/users")
-    public ResponseEntity<?> findUserInfos(
-            @RequestHeader(value = "Authorization", required = true) String token
-    ) throws Exception {
-        Map<String, Object> response = new HashMap<>();
-
-        String username = this.jwtTokenService.validate(token);
-        if (Objects.equals(username, "")) {
-            response.put("message", "Invalid token");
-            return ResponseEntity.badRequest().body(response);
-        }
-
-        User user = (User) this.userRepository.findByUsername(username);
-        UserResponseDTO userResponseDTO = new UserResponseDTO(user);
-
-        response.put("message", "Success on find user");
-        response.put("data", userResponseDTO);
         return ResponseEntity.ok().body(response);
     }
 }
