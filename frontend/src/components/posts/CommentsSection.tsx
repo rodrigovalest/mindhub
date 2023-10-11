@@ -59,8 +59,6 @@ const CommentSection = () => {
     fetchComment();
   }, []);
 
-  console.log(comments.length);
-
   if (comments.length > 0) {
     return (
       <section className="text-white flex justify-center">

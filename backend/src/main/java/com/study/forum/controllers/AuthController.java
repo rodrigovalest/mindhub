@@ -39,7 +39,10 @@ public class AuthController {
 
 
     @PostMapping("/signup")
-    public ResponseEntity<?> signUp(@Valid @RequestBody UserSignupDTO userSignupDTO, BindingResult bindingResult) throws Exception {
+    public ResponseEntity<?> signUp(
+            @Valid @RequestBody UserSignupDTO userSignupDTO,
+            BindingResult bindingResult
+    ) throws Exception {
         Map<String, Object> response = new HashMap<>();
 
         if (bindingResult.hasErrors()) {

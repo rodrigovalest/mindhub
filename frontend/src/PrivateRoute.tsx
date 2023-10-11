@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useEffect, ReactNode } from "react";
+import { useEffect, ReactNode, useState } from "react";
 
 import useFetchBackend from "./hooks/useFetchBackend";
 
@@ -10,13 +10,17 @@ interface PrivateRouteProps {
 export const PrivateRoute = ({ children }: PrivateRouteProps) => {
   const navigate = useNavigate();
   const fetchData = useFetchBackend({ method: "GET", path: "/auth/validate" });
+  const [isValid, setIsValid] = useState<boolean>(false);
 
   const fetchValidate = async () => {
     const fetchedData = await fetchData(null);
 
     if (fetchedData instanceof Error) {
       localStorage.removeItem("token");
+      setIsValid(false);
       navigate("/auth/signin");
+    } else {
+      setIsValid(true);
     }
   };
 
@@ -24,5 +28,9 @@ export const PrivateRoute = ({ children }: PrivateRouteProps) => {
     fetchValidate();
   }, []);
 
-  return <>{children}</>;
+  if (isValid) {
+    return <>{children}</>
+  } else {
+    return null;
+  }
 };

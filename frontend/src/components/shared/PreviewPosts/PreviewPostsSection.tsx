@@ -9,6 +9,7 @@ interface Post {
   title: string,
   mdText: string, 
   category: string,
+  username: string,
 }
 
 const PreviewPostSection = () => {
@@ -17,7 +18,6 @@ const PreviewPostSection = () => {
 
   const fetchPosts = async () => {
     const fetchedPosts = await fetchData(null);
-    console.log(fetchedPosts);
 
     if (fetchedPosts instanceof Error) {
       alert("Something went wrong!");
