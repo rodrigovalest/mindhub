@@ -13,6 +13,8 @@ import { ViewPost } from "./pages/posts/ViewPost";
 import { ChangeProfile } from "./pages/profile/ChangeProfile";
 import { ChangePassword } from "./pages/profile/ChangePassword";
 
+import { SearchPosts } from "./pages/search/SearchPosts";
+
 import { ErrorNotFound } from "./pages/error/ErrorNotFound";
 
 import { Home } from "./pages/Home";
@@ -30,6 +32,7 @@ export default function App() {
           <Route path="/posts/:id" element={<PrivateRoute><ViewPost /></PrivateRoute>} />
           <Route path="/profile/password" element={<PrivateRoute><ChangePassword /></PrivateRoute>} />
           <Route path="/profile" element={<PrivateRoute><ChangeProfile /></PrivateRoute>} />
+          <Route path="/search" element={<PrivateRoute><SearchPosts /></PrivateRoute>} />
           <Route path="/" element={<PrivateRoute><Home /></PrivateRoute>} />
           <Route path="*" element={<ErrorNotFound />} />
         </Routes>

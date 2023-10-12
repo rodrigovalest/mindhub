@@ -1,18 +1,19 @@
 import SearchIcon from "../../assets/searchIcon.svg";
 
-import { useState } from "react";
-
 const SearchBar = () => {
-  // Buscar por posts
-
   return (
-    <form
-
+    <form      
       className="flex items-center w-48 sm:w-1/4"
+      action="/search"
+      method="GET"
     >
       <input
         type="text"
         className="h-8 border-indigo-600 border-2 rounded bg-base text-white pl-1 font-light w-full"
+        name="q"
+        autoCapitalize="off"
+        autoComplete="off"
+        autoCorrect="off"
       />
       <img
         src={SearchIcon}
