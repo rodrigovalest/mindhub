@@ -20,7 +20,7 @@ const PreviewPost = ({ post }: IPreviewPost) => {
             <Link to={`/users/${post.username}`} className="inline-block text-white pr-3 hover:underline">
               {post.username}
             </Link>
-            <Link to={`/${post.username}`} className="inline-block rounded-full h-12 w-12 bg-indigo-600" />
+            <Link to={`/users/${post.username}`} className="inline-block rounded-full h-12 w-12 bg-indigo-600" />
           </div>
         </div>
         <div className="bg-lightbase rounded-md px-8 py-1">

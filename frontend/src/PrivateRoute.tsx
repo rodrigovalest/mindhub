@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, ReactNode, useState } from "react";
 
 import useFetchBackend from "./hooks/useFetchBackend";
+import { UsernameContextProvider } from "./contexts/UsernameContextProvider";
 
 interface PrivateRouteProps {
   children: ReactNode;
@@ -29,7 +30,11 @@ export const PrivateRoute = ({ children }: PrivateRouteProps) => {
   }, []);
 
   if (isValid) {
-    return <>{children}</>
+    return (
+      <UsernameContextProvider>
+        {children}
+      </UsernameContextProvider>
+    );
   } else {
     return null;
   }
