@@ -1,9 +1,12 @@
 package com.study.forum.controllers;
 
+import com.study.forum.dtos.post.PostResponseDTO;
 import com.study.forum.dtos.user.UserResponseDTO;
 import com.study.forum.dtos.user.UserUpdateDTO;
 import com.study.forum.dtos.user.UserUpdatePasswordDTO;
+import com.study.forum.models.Post;
 import com.study.forum.models.User;
+import com.study.forum.repositories.PostRepository;
 import com.study.forum.repositories.UserRepository;
 import com.study.forum.services.JwtTokenService;
 import jakarta.validation.Valid;
@@ -14,9 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 @RestController
 @RequestMapping("/user")

@@ -5,6 +5,7 @@ import com.study.forum.dtos.post.PostResponseDTO;
 import com.study.forum.models.Post;
 import com.study.forum.models.User;
 import com.study.forum.repositories.PostRepository;
+import com.study.forum.repositories.UserRepository;
 import com.study.forum.services.JwtTokenService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,9 @@ public class PostController {
 
     @Autowired
     private PostRepository postRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
 
     @GetMapping
@@ -163,6 +167,25 @@ public class PostController {
         this.postRepository.delete(post);
 
         response.put("message", "Success on delete post");
+        return ResponseEntity.ok().body(response);
+    }
+
+    @GetMapping("/users/{username}")
+    public ResponseEntity<?> findPostsByUsername(
+            @PathVariable("username") String username
+    ) throws Exception {
+        Map<String, Object> response = new HashMap<>();
+
+        User user = (User) this.userRepository.findByUsername(username);
+
+        List<Post> postList = this.postRepository.findByUser(user);
+        List<PostResponseDTO> postResponseDTOList = new ArrayList<>();
+
+        for (Post post : postList)
+            postResponseDTOList.add(new PostResponseDTO(post));
+
+        response.put("message", "Success in finding posts by username");
+        response.put("data", postResponseDTOList);
         return ResponseEntity.ok().body(response);
     }
 }
