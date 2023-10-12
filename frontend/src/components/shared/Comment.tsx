@@ -21,7 +21,7 @@ const Comment = ({ comment, className }: IComment) => {
   const doFetchComment = async () => {
     const newComment = {
       postId: comment.postId,
-      parentCommentId: comment.parentCommentId,
+      parentCommentId: comment.id,
       mdText: commentText
     }
 
