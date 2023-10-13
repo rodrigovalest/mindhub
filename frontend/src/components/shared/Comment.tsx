@@ -1,11 +1,20 @@
 import ReactMarkdown from "react-markdown";
-import { ISchemaComment } from "../posts/CommentsSection";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import MdEditor from "../shared/MdEditor";
 
 import useFetchBackend from "../../hooks/useFetchBackend";
 import Button from "./Button";
+
+interface ISchemaComment {
+  id: string;
+  userId: string;
+  username: string;
+  postId: string;
+  mdText: string,
+  parentCommentId: string | null;
+  children?: ISchemaComment[];
+}
 
 interface IComment {
   key?: number,

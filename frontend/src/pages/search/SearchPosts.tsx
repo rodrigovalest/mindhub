@@ -1,5 +1,5 @@
 import Navbar from "../../components/shared/Navbar";
-import { SearchPostsSection } from "../../components/search/SearchPostsSection";
+import { SearchPostsSection } from "../../components/private/search/SearchPostsSection";
 
 export const SearchPosts = () => {
   return (

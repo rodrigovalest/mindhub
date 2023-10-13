@@ -1,8 +1,8 @@
-import useFetchBackend from "../../hooks/useFetchBackend";
+import useFetchBackend from "../../../hooks/useFetchBackend";
 import { useEffect, useState } from "react";
-import Comment from "../shared/Comment";
+import Comment from "../../shared/Comment";
 
-export interface ISchemaComment {
+interface ISchemaComment {
   id: string;
   userId: string;
   username: string;

@@ -1,11 +1,11 @@
 import ReactMarkdown from "react-markdown";
 import { Link, useNavigate } from "react-router-dom";
 
-import useFetchBackend from "../../hooks/useFetchBackend";
+import useFetchBackend from "../../../hooks/useFetchBackend";
 import { useEffect, useState } from "react";
 
-import Button from "../shared/Button";
-import MdEditor from "../shared/MdEditor";
+import Button from "../../shared/Button";
+import MdEditor from "../../shared/MdEditor";
 
 const ViewPostSection = () => {
   const navigate = useNavigate();

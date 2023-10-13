@@ -5,7 +5,7 @@ import useFetchBackend from "../../hooks/useFetchBackend";
 
 import Navbar from "../../components/shared/Navbar";
 import MdEditor from "../../components/shared/MdEditor";
-import PostCategoriesSelect from "../../components/posts/PostCategoriesSelect";
+import PostCategoriesSelect from "../../components/private/posts/PostCategoriesSelect";
 import Button from "../../components/shared/Button";
 
 export const NewPost = () => {
@@ -42,11 +42,11 @@ export const NewPost = () => {
       <Navbar />
 
       <section className="flex justify-center mt-20">
-        <div className="bg-softbase w-5/6 sm:w-2/3 p-10 pb-4 rounded-lg">
+        <div className="bg-softbase w-5/6 md:w-2/3 p-10 pb-4 rounded-lg">
           <div className="flex justify-between items-center">
             <input
               type="text"
-              className="my-2 mr-2 rounded-md px-2 py-0.5 h-8"
+              className="my-2 mr-2 rounded-md px-2 py-0.5 h-8 w-11/12"
               placeholder="Insert post title..."
               name="title"
               onChange={onTitleChange}

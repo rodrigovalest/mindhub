@@ -5,8 +5,8 @@ import * as yup from "yup";
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import Navbar from "../../components/shared/Navbar";
-import InputType from "../../components/auth/InputType";
-import InputSubmit from "../../components/auth/InputSubmit";
+import InputType from "../../components/private/auth/InputType";
+import InputSubmit from "../../components/private/auth/InputSubmit";
 import useFetchBackend from "../../hooks/useFetchBackend";
 
 const credentialsSchema = yup.object().shape({
