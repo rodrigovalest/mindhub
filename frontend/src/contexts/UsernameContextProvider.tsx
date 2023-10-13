@@ -3,15 +3,11 @@ import { useNavigate } from "react-router-dom";
 
 import useFetchBackend from "../hooks/useFetchBackend";
 
-interface IUsernameContext {
-  username: string | null,
-}
-
-const UsernameContext = createContext<IUsernameContext> ({} as IUsernameContext);
+const UsernameContext = createContext<string | null> (null);
 
 const UsernameContextProvider = ({ children }: any) => {
   const navigate = useNavigate();
-  const [username, setUsername] = useState<string>("");
+  const [username, setUsername] = useState<string | null>("");
   const fetchData = useFetchBackend({ method: "GET", path: "/user" });
 
   const fetchUserData = async () => {
@@ -20,6 +16,7 @@ const UsernameContextProvider = ({ children }: any) => {
     if (fetchedData instanceof Error) {
       alert("Invalid token!");
       localStorage.removeItem("token");
+      setUsername(null);
       navigate("/auth/signin");
     } else {
       setUsername(fetchedData.data.username);
@@ -31,7 +28,7 @@ const UsernameContextProvider = ({ children }: any) => {
   }, []);
 
   return (
-    <UsernameContext.Provider value={{ username: username }}>
+    <UsernameContext.Provider value={username}>
       {children}
     </UsernameContext.Provider>
   );

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import UserContext from "../../contexts/UsernameContextProvider";
 
 const Profile = () => {
-  const usernameContextObject = useContext(UserContext);
+  const usernameContextValue = useContext(UserContext);
   const [isOpen, setIsOpen] = useState(false);
   const cardRef = useRef<HTMLDivElement | null>(null);
 
@@ -28,11 +28,11 @@ const Profile = () => {
         onClick={() => setIsOpen(!isOpen)}
       />
 
-      {isOpen && usernameContextObject && (
+      {isOpen && usernameContextValue && (
         <div className="absolute right-0 mt-5 mr-8 rounded-md bg-lightbase text-white">
           <div className="px-2 py-2">
             <div className="px-3 py-2 rounded-md hover:bg-softbase hover:cursor-pointer">
-              <Link to={`/users/${usernameContextObject.username}`}>My posts</Link>
+              <Link to={`/users/${usernameContextValue}`}>My posts</Link>
             </div>
             <div className="px-3 py-2 rounded-md hover:bg-softbase hover:cursor-pointer">
               <Link to={`/profile`}>Edit profile</Link>
