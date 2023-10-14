@@ -11,7 +11,7 @@ const Navbar = () => {
         <Link to="/">
           <Logo />
         </Link>
-        <Link to="/posts/new" className="text-white hover:text-gray-200 pl-4">New post</Link>
+        <Link to="/posts/new" className="text-white hover:text-gray-200 pl-6">New post</Link>
       </div>
       <SearchBar />
       <Profile />
