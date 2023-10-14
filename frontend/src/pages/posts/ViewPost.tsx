@@ -1,12 +1,12 @@
 import Navbar from "../../components/shared/Navbar";
-import ViewPostSection from "../../components/private/posts/ViewPostSection";
+import PostSection from "../../components/private/posts/PostSection";
 import CommentSection from "../../components/private/posts/CommentsSection";
 
 export const ViewPost = () => {
   return (
     <div>
       <Navbar />
-      <ViewPostSection />
+      <PostSection />
       <CommentSection />
     </div>
   );

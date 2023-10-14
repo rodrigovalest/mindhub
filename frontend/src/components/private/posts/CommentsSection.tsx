@@ -62,6 +62,7 @@ const CommentSection = () => {
   if (comments.length > 0) {
     return (
       <section className="text-white flex justify-center">
+        <div className="w-[50px] mr-4" />
         <div className="mt-8 mb-10 bg-softbase rounded pt-4 pb-8 px-8 w-5/6 sm:w-2/3">
           {comments && comments.map((comment: ISchemaComment, index: number) => (
             <Comment key={index} comment={comment} />
