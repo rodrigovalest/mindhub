@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 interface IPostHeader {
   post: any,
 }
@@ -11,9 +13,9 @@ const PostHeader = ({ post }: IPostHeader) => {
 
       <p className="text-gray-200 mb-6 text-[16px]">
         Sent by
-        <span className="bg-indigo-900 rounded-md text-indigo-300 ml-2 px-2 py-[3px] hover:underline hover:cursor-pointer">
+        <Link to={`/users/${post.username}`} className="bg-indigo-900 rounded-md text-indigo-300 ml-2 px-2 py-[3px] hover:underline hover:cursor-pointer">
           {post.username}
-        </span>
+        </Link>
       </p>
 
       <p className="inline bg-indigo-900 rounded-md text-[13px] text-indigo-300 px-2 py-[4px]">
