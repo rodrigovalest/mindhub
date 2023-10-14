@@ -20,7 +20,7 @@ public class PostResponseDTO {
     private String mdText;
     private String category;
     private LocalDateTime creationTimestamp;
-
+    private Long likeBalance;
 
     public PostResponseDTO(Post post) {
         this.id = post.getId();

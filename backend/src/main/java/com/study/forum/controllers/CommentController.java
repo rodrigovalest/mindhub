@@ -7,6 +7,7 @@ import com.study.forum.models.Post;
 import com.study.forum.models.User;
 import com.study.forum.repositories.CommentRepository;
 import com.study.forum.repositories.PostRepository;
+import com.study.forum.services.CommentLikeService;
 import com.study.forum.services.JwtTokenService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,9 @@ public class CommentController {
 
     @Autowired
     private CommentRepository commentRepository;
+
+    @Autowired
+    private CommentLikeService commentLikeService;
 
     @PostMapping
     public ResponseEntity<?> save(
@@ -83,6 +87,7 @@ public class CommentController {
 
         for (Comment comment : commentList) {
             CommentResponseDTO commentResponseDTO = new CommentResponseDTO(comment);
+            commentResponseDTO.setLikeBalance(this.commentLikeService.countLikesBalanceByComment(comment));
             commentResponseDTOList.add(commentResponseDTO);
         }
 

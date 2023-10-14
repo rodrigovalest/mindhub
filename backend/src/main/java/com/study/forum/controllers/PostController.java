@@ -7,6 +7,7 @@ import com.study.forum.models.User;
 import com.study.forum.repositories.PostRepository;
 import com.study.forum.repositories.UserRepository;
 import com.study.forum.services.JwtTokenService;
+import com.study.forum.services.PostLikeService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +29,8 @@ public class PostController {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private PostLikeService postLikeService;
 
     @GetMapping
     public ResponseEntity<?> findAllPosts() throws Exception {
@@ -36,8 +39,11 @@ public class PostController {
         List<Post> postList = this.postRepository.findAll();
         List<PostResponseDTO> postResponseDTOList = new ArrayList<>();
 
-        for (Post post : postList)
-            postResponseDTOList.add(new PostResponseDTO(post));
+        for (Post post : postList) {
+            PostResponseDTO postResponseDTO = new PostResponseDTO(post);
+            postResponseDTO.setLikeBalance(this.postLikeService.countLikesBalanceByPost(post));
+            postResponseDTOList.add(postResponseDTO);
+        }
 
         response.put("message", "Success in finding all posts");
         response.put("data", postResponseDTOList);
@@ -58,8 +64,11 @@ public class PostController {
         List<Post> postList = this.postRepository.findByTitleContaining(postTitle);
         List<PostResponseDTO> postResponseDTOList = new ArrayList<>();
 
-        for (Post post : postList)
-            postResponseDTOList.add(new PostResponseDTO(post));
+        for (Post post : postList) {
+            PostResponseDTO postResponseDTO = new PostResponseDTO(post);
+            postResponseDTO.setLikeBalance(this.postLikeService.countLikesBalanceByPost(post));
+            postResponseDTOList.add(postResponseDTO);
+        }
 
         response.put("message", "Success in finding all posts");
         response.put("data", postResponseDTOList);
@@ -99,9 +108,13 @@ public class PostController {
             response.put("message", "Post not found");
             return ResponseEntity.badRequest().body(response);
         }
+        Post post = optionalPost.get();
+
+        PostResponseDTO postResponseDTO = new PostResponseDTO(post);
+        postResponseDTO.setLikeBalance(this.postLikeService.countLikesBalanceByPost(post));
 
         response.put("message", "Success in finding all posts");
-        response.put("data", new PostResponseDTO(optionalPost.get()));
+        response.put("data", postResponseDTO);
         return ResponseEntity.ok().body(response);
     }
 
@@ -181,8 +194,11 @@ public class PostController {
         List<Post> postList = this.postRepository.findByUser(user);
         List<PostResponseDTO> postResponseDTOList = new ArrayList<>();
 
-        for (Post post : postList)
-            postResponseDTOList.add(new PostResponseDTO(post));
+        for (Post post : postList) {
+            PostResponseDTO postResponseDTO = new PostResponseDTO(post);
+            postResponseDTO.setLikeBalance(this.postLikeService.countLikesBalanceByPost(post));
+            postResponseDTOList.add(postResponseDTO);
+        }
 
         response.put("message", "Success in finding posts by username");
         response.put("data", postResponseDTOList);
