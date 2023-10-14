@@ -16,7 +16,7 @@ const InputType: React.FC<IPropsInputType> = ({ type, fieldName, register, defau
       </label>
       <input
         type={type}
-        className="w-full h-9 border-indigo-600 border-2 rounded bg-base text-white pl-1 font-light"
+        className="w-full h-9 border-indigo-600 border-2 rounded bg-base text-white pl-1 font-light focus:border-indigo-600 focus:outline-none"
         {...register(fieldName)}
         autoComplete="off"
         autoCorrect="off"

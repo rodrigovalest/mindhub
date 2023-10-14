@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
 import useFetchBackend from "../../../hooks/useFetchBackend";
-import PreviewPost from "../../shared/preview/PreviewPost";
+import PreviewPost from "../posts/preview/PreviewPost";
 
 interface Post {
   id: string,

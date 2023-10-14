@@ -9,7 +9,7 @@ const SearchBar = () => {
     >
       <input
         type="text"
-        className="h-8 border-indigo-600 border-2 rounded bg-base text-white pl-1 font-light w-full"
+        className="h-8 border-indigo-600 border-2 rounded bg-base text-white pl-1 font-light w-full focus:border-indigo-600 focus:outline-none"
         name="q"
         autoCapitalize="off"
         autoComplete="off"
