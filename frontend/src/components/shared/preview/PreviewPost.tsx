@@ -1,5 +1,5 @@
 import ReactMarkdown from "react-markdown";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 interface IPreviewPost {
   post: any,
@@ -7,10 +7,11 @@ interface IPreviewPost {
 }
 
 const PreviewPost = ({ post }: IPreviewPost) => {
+  const navigate = useNavigate();
   const truncatedMdText = post.mdText.slice(0, 400);
 
   return (
-    <Link to={`/posts/${post.id}`}>
+    <div onClick={() => navigate(`/posts/${post.id}`)} className="hover:cursor-pointer">
       <div className="bg-softbase rounded-md py-5 my-5 px-6">
         <div className="flex justify-between items-center pb-6">
           <h2 className="text-indigo-500 text-2xl font-bold pb-2">
@@ -29,7 +30,7 @@ const PreviewPost = ({ post }: IPreviewPost) => {
           </ReactMarkdown>
         </div>
       </div>
-    </Link>
+    </div>
   );
 }
 
