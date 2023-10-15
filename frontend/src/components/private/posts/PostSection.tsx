@@ -1,8 +1,7 @@
 import ReactMarkdown from "react-markdown";
-import { Link, useNavigate } from "react-router-dom";
 
 import useFetchBackend from "../../../hooks/useFetchBackend";
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 
 import Button from "../../shared/Button";
 import MdEditor from "../../shared/MdEditor";
@@ -10,29 +9,16 @@ import LikeButtons from "../../shared/LikeButtons";
 import PostHeader from "./PostHeader";
 import IPost from "../../../interfaces/IPost";
 
-const PostSection = () => {
-  const navigate = useNavigate();
-  const fetchPost = useFetchBackend({ method: "GET", path: `${window.location.pathname}` });
-  const [post, setPost] = useState<IPost>({} as IPost);
+interface IPropsPostSection {
+  post: IPost
+}
+
+const PostSection = ({ post }: IPropsPostSection) => {
+  const [postLoaded, setPostLoaded] = useState<boolean>(false);
 
   const fetchComment = useFetchBackend({ method: "POST", path: `/comments` });
   const [commentText, setCommentText] = useState<string>("");
   const [isCommenting, setIsCommenting] = useState<boolean>(false);
-
-  const doFetchPost = async () => {
-    const fetchedData = await fetchPost(null);
-
-    if (fetchedData instanceof Error) {
-      alert("Something, went wrong!");
-      navigate("/");
-    } else {
-      setPost(fetchedData.data);
-    }
-  };
-
-  useEffect(() => {
-    doFetchPost();
-  }, []);
 
   const doFetchComment = async () => {
     const newComment = {
@@ -48,6 +34,14 @@ const PostSection = () => {
       alert("Comment made successfully!");
       window.location.reload();
     }
+  }
+
+  useEffect(() => {
+    setPostLoaded(true);
+  }, []);
+
+  if (!postLoaded) {
+    return null;
   }
 
   return (

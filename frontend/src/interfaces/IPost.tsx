@@ -5,7 +5,8 @@ interface IPost {
   mdText: string, 
   category: string,
   username: string,
-  likeBalance: number
+  likeBalance: number,
+  userLike: boolean | null
 }
 
 export default IPost;

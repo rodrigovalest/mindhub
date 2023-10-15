@@ -27,12 +27,16 @@ const useFetchBackend = ({ method, path }: IUseFetchBackend) => {
 
       if (!response.ok) {
         const fetchedData = await response.json();
-
-        if (fetchedData.message)
+  
+        if (fetchedData.message) {
           throw new Error(fetchedData.message);
-
+        }
+  
         throw new Error("Something went wrong");
       }
+
+      if (response.status === 204)
+        return;
 
       const fetchedData = await response.json();
       return fetchedData;

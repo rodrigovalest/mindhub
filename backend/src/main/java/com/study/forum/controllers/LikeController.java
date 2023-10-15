@@ -75,7 +75,8 @@ public class LikeController {
             this.commentLikeRepository.save(commentLike);
         }
 
-        return ResponseEntity.noContent().build();
+        response.put("data", this.commentLikeService.countLikesBalanceByComment(comment));
+        return ResponseEntity.ok().body(response);
     }
 
     @PutMapping("/posts/{postId}")
@@ -113,7 +114,8 @@ public class LikeController {
             this.postLikeRepository.save(postLike);
         }
 
-        return ResponseEntity.noContent().build();
+        response.put("data", this.postLikeService.countLikesBalanceByPost(post));
+        return ResponseEntity.ok().body(response);
     }
 
     @DeleteMapping("/comments/{commentId}")
