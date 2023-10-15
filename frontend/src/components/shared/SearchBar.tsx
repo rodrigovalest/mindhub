@@ -11,6 +11,7 @@ const SearchBar = () => {
         type="text"
         className="h-8 border-indigo-600 border-2 rounded bg-base text-white pl-1 font-light w-full focus:border-indigo-600 focus:outline-none hover:bg-softbase"
         name="q"
+        placeholder="Search post..."
         autoCapitalize="off"
         autoComplete="off"
         autoCorrect="off"

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 
 import useFetchBackend from "../../../hooks/useFetchBackend";
 import PreviewPost from "../posts/preview/PreviewPost";
+import Container from "../../shared/Container";
 
 interface Post {
   id: string,
@@ -31,24 +32,22 @@ export const SearchPostsByUserSection = () => {
   }, []);
 
   return (
-    <div className="flex justify-center">
-      <div className="my-10 w-5/6 sm:w-2/3">
-        <h1 className="pb-6 text-4xl font-bold text-indigo-600">
-          {window.location.pathname.replace(/^\/users\//, '')}
-        </h1>
-        {posts.length > 0 && (
-          <div>
-            {posts.map((post: any, key: number) => (
-              <PreviewPost post={post} key={key} />
-            ))}
-          </div>
-        )}
-        {posts.length === 0 && (
-          <div>
-            <h1 className="pb-6 text-white">It seems like there's nothing here</h1>
-          </div>
-        )}
-      </div>
-    </div>
+    <Container>
+      <h1 className="pb-6 text-4xl font-bold text-indigo-600">
+        {window.location.pathname.replace(/^\/users\//, '')}
+      </h1>
+      {posts.length > 0 && (
+        <div>
+          {posts.map((post: any, key: number) => (
+            <PreviewPost post={post} key={key} />
+          ))}
+        </div>
+      )}
+      {posts.length === 0 && (
+        <div>
+          <h1 className="pb-6 text-white">It seems like there's nothing here</h1>
+        </div>
+      )}
+    </Container>
   );
 }

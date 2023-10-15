@@ -1,12 +1,12 @@
 import ReactMarkdown from "react-markdown";
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import MdEditor from "../shared/MdEditor";
+import MdEditor from "../../shared/MdEditor";
 
-import useFetchBackend from "../../hooks/useFetchBackend";
-import Button from "./Button";
-import LikeButtons from "./LikeButtons";
-import IComment from "../../interfaces/IComment";
+import useFetchBackend from "../../../hooks/useFetchBackend";
+import Button from "../../shared/Button";
+import IComment from "../../../interfaces/IComment";
+import CommentLikeButtons from "./CommentLikeButtons";
 
 interface IPropsComment {
   key?: number,
@@ -39,10 +39,10 @@ const Comment = ({ comment, className }: IPropsComment) => {
   return (
     <>
       <div className="flex pt-8 w-full">
-        <div>
-          {/* <LikeButtons /> */}
+        <div className="flex flex-col">
+          <CommentLikeButtons comment={comment} />
 
-          {/* <div className="w-[1px] ml-[38%] mt-[10px] bg-gray-300 h-full" /> */}
+          <div className="w-[1px] ml-[38%] mt-[10px] bg-gray-300 h-full" />
         </div>
 
         <div className="w-full mt-[8px]">

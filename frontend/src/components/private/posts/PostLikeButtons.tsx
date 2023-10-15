@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react';
 
-import LikeArrow from '../../assets/likeArrow.svg';
-import LikeArrowFilled from '../../assets/likeArrowFilled.svg';
-import IPost from '../../interfaces/IPost';
-import useFetchBackend from '../../hooks/useFetchBackend';
+import LikeArrow from '../../../assets/likeArrow.svg';
+import LikeArrowFilled from '../../../assets/likeArrowFilled.svg';
+import IPost from '../../../interfaces/IPost';
+import useFetchBackend from '../../../hooks/useFetchBackend';
 
-interface IPropsLikeButtons {
+interface IPropsPostLikeButtons {
   post: IPost
 }
 
-const LikeButtons = ({ post }: IPropsLikeButtons) => {
+const PostLikeButtons = ({ post }: IPropsPostLikeButtons) => {
   const [likeClicked, setLikeClicked] = useState(false);
   const [dislikeClicked, setDislikeClicked] = useState(false);
 
@@ -18,7 +18,6 @@ const LikeButtons = ({ post }: IPropsLikeButtons) => {
   const fetchRemoveLike = useFetchBackend({ method: "DELETE", path: `/likes/posts/${post.id}` });
 
   useEffect(() => {
-    console.log(post);
     if (post.userLike != null) {
       post.userLike ? setLikeClicked(true) : setDislikeClicked(true); 
     }
@@ -97,4 +96,4 @@ const LikeButtons = ({ post }: IPropsLikeButtons) => {
   );
 };
 
-export default LikeButtons;
+export default PostLikeButtons;

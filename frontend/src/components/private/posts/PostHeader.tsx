@@ -7,8 +7,8 @@ interface IPropsPostHeader {
 
 const PostHeader = ({ post }: IPropsPostHeader) => {
   return (
-    <div className="w-5/6 sm:w-2/3">
-      <h2 className="text-indigo-500 text-4xl font-bold mb-5">
+    <div className="w-5/6 sm:w-2/3 mb-[8px]">
+      <h2 className="text-indigo-500 text-4xl font-bold mb-5 break-all">
         {post.title}
       </h2>
 

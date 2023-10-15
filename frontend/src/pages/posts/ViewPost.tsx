@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 import Navbar from "../../components/shared/Navbar";
 import PostSection from "../../components/private/posts/PostSection";
-import CommentSection from "../../components/private/posts/CommentsSection";
+import CommentSection from "../../components/private/comments/CommentsSection";
 import IPost from "../../interfaces/IPost";
 
 export const ViewPost = () => {

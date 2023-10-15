@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 
 import useFetchBackend from "../../../../hooks/useFetchBackend";
 import IPost from "../../../../interfaces/IPost";
+import Container from "../../../shared/Container";
 
 const PreviewPostSection = () => {
   const fetchData = useFetchBackend({ method: "GET", path: "/posts" });
@@ -23,13 +24,11 @@ const PreviewPostSection = () => {
   }, []);
 
   return (
-    <div className="flex justify-center">
-      <div className="my-10 w-5/6 md:w-2/3">
-        {posts.map((post: any, key: number) => (
-          <PreviewPost post={post} key={key} />
-        ))}
-      </div>
-    </div>
+    <Container>
+      {posts.map((post: any, key: number) => (
+        <PreviewPost post={post} key={key} />
+      ))}
+    </Container>
   );
 }
 

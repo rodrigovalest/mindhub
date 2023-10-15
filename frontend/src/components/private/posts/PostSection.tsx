@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 
 import Button from "../../shared/Button";
 import MdEditor from "../../shared/MdEditor";
-import LikeButtons from "../../shared/LikeButtons";
+import LikeButtons from "./PostLikeButtons";
 import PostHeader from "./PostHeader";
 import IPost from "../../../interfaces/IPost";
 
@@ -45,26 +45,21 @@ const PostSection = ({ post }: IPropsPostSection) => {
   }
 
   return (
-    <section>
+    <section className="mt-[50px]">
       <div className="flex justify-center">
         <LikeButtons post={post} />
-
         <PostHeader post={post} />
       </div>
-
       <div className="flex justify-center mt-4 mb-4">
         <div className="w-[50px] mr-4" />
-
         <div className="bg-softbase rounded-md w-5/6 sm:w-2/3 py-5 px-6">
           <ReactMarkdown className="renderMd text-white">
             {post.mdText}
           </ReactMarkdown>
         </div>
       </div>
-
       <div className="flex justify-center">
         <div className="w-[50px] mr-4" />
-
         <div className="w-2/3 mb-10">
           {!isCommenting && (
             <Button text="Comment" onClick={() => setIsCommenting(true)} />
