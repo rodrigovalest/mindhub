@@ -6,6 +6,7 @@ import Navbar from "../../components/shared/Navbar";
 import PostSection from "../../components/private/posts/PostSection";
 import CommentSection from "../../components/private/comments/CommentsSection";
 import IPost from "../../interfaces/IPost";
+import Loading from "../../components/shared/Loading";
 
 export const ViewPost = () => {
   const navigate = useNavigate();
@@ -28,7 +29,7 @@ export const ViewPost = () => {
   }, []);
 
   if (post === undefined) {
-    return <h1>Loading...</h1>
+    return <Loading />;
   }
 
   return (
