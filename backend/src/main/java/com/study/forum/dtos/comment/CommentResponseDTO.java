@@ -21,6 +21,7 @@ public class CommentResponseDTO {
     private String mdText;
     private LocalDateTime creationTimestamp;
     private Long likeBalance;
+    private Boolean userLike;
 
     public CommentResponseDTO(Comment comment) {
         this.id = comment.getId();

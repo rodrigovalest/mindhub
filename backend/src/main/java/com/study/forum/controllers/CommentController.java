@@ -3,10 +3,13 @@ package com.study.forum.controllers;
 import com.study.forum.dtos.comment.CommentRequestDTO;
 import com.study.forum.dtos.comment.CommentResponseDTO;
 import com.study.forum.models.Comment;
+import com.study.forum.models.CommentLike;
 import com.study.forum.models.Post;
 import com.study.forum.models.User;
+import com.study.forum.repositories.CommentLikeRepository;
 import com.study.forum.repositories.CommentRepository;
 import com.study.forum.repositories.PostRepository;
+import com.study.forum.repositories.UserRepository;
 import com.study.forum.services.CommentLikeService;
 import com.study.forum.services.JwtTokenService;
 import jakarta.validation.Valid;
@@ -28,10 +31,16 @@ public class CommentController {
     private PostRepository postRepository;
 
     @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
     private CommentRepository commentRepository;
 
     @Autowired
     private CommentLikeService commentLikeService;
+
+    @Autowired
+    private CommentLikeRepository commentLikeRepository;
 
     @PostMapping
     public ResponseEntity<?> save(
@@ -78,15 +87,30 @@ public class CommentController {
 
     @GetMapping
     public ResponseEntity<?> findAllByPost(
+            @RequestHeader(value = "Authorization", required = true) String token,
             @RequestParam(name = "post") UUID postId
     ) throws Exception {
         Map<String, Object> response = new HashMap<>();
+
+        String username = this.jwtTokenService.validate(token);
+        if (Objects.equals(username, "")) {
+            response.put("message", "Invalid token");
+            return ResponseEntity.badRequest().body(response);
+        }
+        User user = (User) this.userRepository.findByUsername(username);
 
         List<Comment> commentList = this.commentRepository.findAllCommentsForPost(postId);
         List<CommentResponseDTO> commentResponseDTOList = new ArrayList<>(List.of());
 
         for (Comment comment : commentList) {
             CommentResponseDTO commentResponseDTO = new CommentResponseDTO(comment);
+
+            Optional<CommentLike> optionalCommentLike = this.commentLikeRepository.findByCommentAndUser(comment, user);
+            if (optionalCommentLike.isPresent()) {
+                CommentLike commentLike = optionalCommentLike.get();
+                commentResponseDTO.setUserLike(commentLike.getLikeType());
+            }
+
             commentResponseDTO.setLikeBalance(this.commentLikeService.countLikesBalanceByComment(comment));
             commentResponseDTOList.add(commentResponseDTO);
         }
@@ -98,9 +122,17 @@ public class CommentController {
 
     @GetMapping("/{commentId}")
     public ResponseEntity<?> getOne(
+            @RequestHeader(value = "Authorization", required = true) String token,
             @PathVariable("commentId") UUID commentId
     ) throws Exception {
         Map<String, Object> response = new HashMap<>();
+
+        String username = this.jwtTokenService.validate(token);
+        if (Objects.equals(username, "")) {
+            response.put("message", "Invalid token");
+            return ResponseEntity.badRequest().body(response);
+        }
+        User user = (User) this.userRepository.findByUsername(username);
 
         Optional<Comment> optionalComment = this.commentRepository.findById(commentId);
         if (optionalComment.isEmpty()) {
@@ -109,8 +141,17 @@ public class CommentController {
         }
         Comment comment = optionalComment.get();
 
+        CommentResponseDTO commentResponseDTO = new CommentResponseDTO(comment);
+        Optional<CommentLike> optionalCommentLike = this.commentLikeRepository.findByCommentAndUser(comment, user);
+        if (optionalCommentLike.isPresent()) {
+            CommentLike commentLike = optionalCommentLike.get();
+            commentResponseDTO.setUserLike(commentLike.getLikeType());
+        }
+        commentResponseDTO.setLikeBalance(this.commentLikeService.countLikesBalanceByComment(comment));
+
+
         response.put("message", "Success on get one comment");
-        response.put("data", new CommentResponseDTO(comment));
+        response.put("data", commentResponseDTO);
         return ResponseEntity.ok().body(response);
     }
 

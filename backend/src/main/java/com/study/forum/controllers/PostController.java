@@ -3,7 +3,9 @@ package com.study.forum.controllers;
 import com.study.forum.dtos.post.PostRequestDTO;
 import com.study.forum.dtos.post.PostResponseDTO;
 import com.study.forum.models.Post;
+import com.study.forum.models.PostLike;
 import com.study.forum.models.User;
+import com.study.forum.repositories.PostLikeRepository;
 import com.study.forum.repositories.PostRepository;
 import com.study.forum.repositories.UserRepository;
 import com.study.forum.services.JwtTokenService;
@@ -32,15 +34,34 @@ public class PostController {
     @Autowired
     private PostLikeService postLikeService;
 
+    @Autowired
+    private PostLikeRepository postLikeRepository;
+
     @GetMapping
-    public ResponseEntity<?> findAllPosts() throws Exception {
+    public ResponseEntity<?> findAllPosts(
+            @RequestHeader(value = "Authorization", required = true) String token
+    ) throws Exception {
         Map<String, Object> response = new HashMap<>();
 
         List<Post> postList = this.postRepository.findAll();
         List<PostResponseDTO> postResponseDTOList = new ArrayList<>();
 
+        String username = this.jwtTokenService.validate(token);
+        if (Objects.equals(username, "")) {
+            response.put("message", "Invalid token");
+            return ResponseEntity.badRequest().body(response);
+        }
+        User user = (User) this.userRepository.findByUsername(username);
+
         for (Post post : postList) {
             PostResponseDTO postResponseDTO = new PostResponseDTO(post);
+
+            Optional<PostLike> optionalPostLike = this.postLikeRepository.findByPostAndUser(post, user);
+            if (optionalPostLike.isPresent()) {
+                PostLike postLike = optionalPostLike.get();
+                postResponseDTO.setUserLike(postLike.getLikeType());
+            }
+
             postResponseDTO.setLikeBalance(this.postLikeService.countLikesBalanceByPost(post));
             postResponseDTOList.add(postResponseDTO);
         }
@@ -52,6 +73,7 @@ public class PostController {
 
     @GetMapping("/search")
     public ResponseEntity<?> findAllPostsByTitle(
+            @RequestHeader(value = "Authorization", required = true) String token,
             @RequestParam(name = "q") String postTitle
     ) throws Exception {
         Map<String, Object> response = new HashMap<>();
@@ -61,11 +83,25 @@ public class PostController {
             return ResponseEntity.badRequest().body(response);
         }
 
+        String username = this.jwtTokenService.validate(token);
+        if (Objects.equals(username, "")) {
+            response.put("message", "Invalid token");
+            return ResponseEntity.badRequest().body(response);
+        }
+        User user = (User) this.userRepository.findByUsername(username);
+
         List<Post> postList = this.postRepository.findByTitleContaining(postTitle);
         List<PostResponseDTO> postResponseDTOList = new ArrayList<>();
 
         for (Post post : postList) {
             PostResponseDTO postResponseDTO = new PostResponseDTO(post);
+
+            Optional<PostLike> optionalPostLike = this.postLikeRepository.findByPostAndUser(post, user);
+            if (optionalPostLike.isPresent()) {
+                PostLike postLike = optionalPostLike.get();
+                postResponseDTO.setUserLike(postLike.getLikeType());
+            }
+
             postResponseDTO.setLikeBalance(this.postLikeService.countLikesBalanceByPost(post));
             postResponseDTOList.add(postResponseDTO);
         }
@@ -99,9 +135,17 @@ public class PostController {
 
     @GetMapping("/{postId}")
     public ResponseEntity<?> findPostById(
+            @RequestHeader(value = "Authorization", required = true) String token,
             @PathVariable("postId") UUID postId
     ) throws Exception {
         Map<String, Object> response = new HashMap<>();
+
+        String username = this.jwtTokenService.validate(token);
+        if (Objects.equals(username, "")) {
+            response.put("message", "Invalid token");
+            return ResponseEntity.badRequest().body(response);
+        }
+        User user = (User) this.userRepository.findByUsername(username);
 
         Optional<Post> optionalPost = this.postRepository.findById(postId);
         if (optionalPost.isEmpty()) {
@@ -111,6 +155,11 @@ public class PostController {
         Post post = optionalPost.get();
 
         PostResponseDTO postResponseDTO = new PostResponseDTO(post);
+        Optional<PostLike> optionalPostLike = this.postLikeRepository.findByPostAndUser(post, user);
+        if (optionalPostLike.isPresent()) {
+            PostLike postLike = optionalPostLike.get();
+            postResponseDTO.setUserLike(postLike.getLikeType());
+        }
         postResponseDTO.setLikeBalance(this.postLikeService.countLikesBalanceByPost(post));
 
         response.put("message", "Success in finding all posts");
@@ -185,17 +234,36 @@ public class PostController {
 
     @GetMapping("/users/{username}")
     public ResponseEntity<?> findPostsByUsername(
+            @RequestHeader(value = "Authorization", required = true) String token,
             @PathVariable("username") String username
     ) throws Exception {
         Map<String, Object> response = new HashMap<>();
 
-        User user = (User) this.userRepository.findByUsername(username);
+        User userFounded = (User) this.userRepository.findByUsername(username);
+        if (userFounded == null) {
+            response.put("message", "Inexistent user");
+            return ResponseEntity.badRequest().body(response);
+        }
 
-        List<Post> postList = this.postRepository.findByUser(user);
+        String usernameAuth = this.jwtTokenService.validate(token);
+        if (Objects.equals(usernameAuth, "")) {
+            response.put("message", "Invalid token");
+            return ResponseEntity.badRequest().body(response);
+        }
+        User userAuth = (User) this.userRepository.findByUsername(usernameAuth);
+
+        List<Post> postList = this.postRepository.findByUser(userFounded);
         List<PostResponseDTO> postResponseDTOList = new ArrayList<>();
 
         for (Post post : postList) {
             PostResponseDTO postResponseDTO = new PostResponseDTO(post);
+
+            Optional<PostLike> optionalPostLike = this.postLikeRepository.findByPostAndUser(post, userAuth);
+            if (optionalPostLike.isPresent()) {
+                PostLike postLike = optionalPostLike.get();
+                postResponseDTO.setUserLike(postLike.getLikeType());
+            }
+
             postResponseDTO.setLikeBalance(this.postLikeService.countLikesBalanceByPost(post));
             postResponseDTOList.add(postResponseDTO);
         }

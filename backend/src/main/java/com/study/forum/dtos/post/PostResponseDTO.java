@@ -21,6 +21,7 @@ public class PostResponseDTO {
     private String category;
     private LocalDateTime creationTimestamp;
     private Long likeBalance;
+    private Boolean userLike;
 
     public PostResponseDTO(Post post) {
         this.id = post.getId();
