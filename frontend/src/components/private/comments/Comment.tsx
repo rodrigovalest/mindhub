@@ -1,28 +1,20 @@
 import ReactMarkdown from "react-markdown";
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import MdEditor from "../shared/MdEditor";
+import MdEditor from "../../shared/MdEditor";
 
-import useFetchBackend from "../../hooks/useFetchBackend";
-import Button from "./Button";
+import useFetchBackend from "../../../hooks/useFetchBackend";
+import Button from "../../shared/Button";
+import IComment from "../../../interfaces/IComment";
+import CommentLikeButtons from "./CommentLikeButtons";
 
-interface ISchemaComment {
-  id: string;
-  userId: string;
-  username: string;
-  postId: string;
-  mdText: string,
-  parentCommentId: string | null;
-  children?: ISchemaComment[];
-}
-
-interface IComment {
+interface IPropsComment {
   key?: number,
   className?: string,
-  comment: ISchemaComment,
+  comment: IComment,
 }
 
-const Comment = ({ comment, className }: IComment) => {
+const Comment = ({ comment, className }: IPropsComment) => {
   const fetchComment = useFetchBackend({ method: "POST", path: `/comments` });
   const [commentText, setCommentText] = useState<string>("");
   const [isCommenting, setIsCommenting] = useState<boolean>(false);
@@ -46,24 +38,26 @@ const Comment = ({ comment, className }: IComment) => {
 
   return (
     <>
-      <div className="flex justify-start items-center py-5">
-        <Link to={`/users/${comment.username}`} className="inline-block bg-indigo-600 rounded-full h-10 w-10">
+      <div className="flex pt-8 w-full">
+        <div className="flex flex-col">
+          <CommentLikeButtons comment={comment} />
 
-        </Link>
-        <Link to={`/users/${comment.username}`} className="inline-block text-white pl-4 hover:underline">
-          {comment.username}
-        </Link>
-      </div>
+          <div className="w-[1px] ml-[38%] mt-[10px] bg-gray-300 h-full" />
+        </div>
 
-      <div className="flex">
-        <div className="border-e ml-4 w-1"></div>
+        <div className="w-full mt-[8px]">
+          <Link
+            to={`/users/${comment.username}`}
+            className="bg-indigo-900 rounded-md text-indigo-300 px-2 py-[3px] hover:underline hover:cursor-pointer"
+          >
+            {comment.username}
+          </Link>
 
-        <div className={`${className} pl-10 pt-5 w-full`}>
           <ReactMarkdown className="renderMd text-white">{comment.mdText}</ReactMarkdown>
 
-          <div className="mb-10">
+          <div>
             {!isCommenting && (
-              <Button text="Comment" onClick={() => setIsCommenting(true)} />
+              <Button text="Comment" className="mt-0" onClick={() => setIsCommenting(true)} />
             )}
             {isCommenting && (
               <div className="mt-4 text-black">

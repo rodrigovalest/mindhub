@@ -1,10 +1,10 @@
-interface IButton {
+interface IPropsButton {
   text: string,
   className?: string | undefined,
   onClick?: React.MouseEventHandler<HTMLButtonElement> | undefined,
 }
 
-const Button = ({ text, className, onClick }: IButton) => {
+const Button = ({ text, className, onClick }: IPropsButton) => {
   if (!className) {
     className = "mt-5 mb-2";
   }

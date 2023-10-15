@@ -1,19 +1,11 @@
 import useFetchBackend from "../../../hooks/useFetchBackend";
 import { useEffect, useState } from "react";
-import Comment from "../../shared/Comment";
+import Comment from "./Comment";
+import IComment from "../../../interfaces/IComment";
+import Loading from "../../shared/Loading";
 
-interface ISchemaComment {
-  id: string;
-  userId: string;
-  username: string;
-  postId: string;
-  mdText: string,
-  parentCommentId: string | null;
-  children?: ISchemaComment[];
-}
-
-const toTreeOfComments = (comments: ISchemaComment[]) => {
-  const searchParentComment = (parentCommentId: string): ISchemaComment | null => {
+const toTreeOfComments = (comments: IComment[]) => {
+  const searchParentComment = (parentCommentId: string): IComment | null => {
     for (const comment of comments) {
       if (comment.id === parentCommentId) {
         return comment;
@@ -22,9 +14,9 @@ const toTreeOfComments = (comments: ISchemaComment[]) => {
     return null;
   }
 
-  const rootComments: ISchemaComment[] = [];
+  const rootComments: IComment[] = [];
 
-  comments.forEach((comment: ISchemaComment) => {
+  comments.forEach((comment: IComment) => {
     if (!comment.parentCommentId) {
       rootComments.push(comment);
     } else {
@@ -43,7 +35,7 @@ const toTreeOfComments = (comments: ISchemaComment[]) => {
 
 const CommentSection = () => {
   const fetchData = useFetchBackend({ method: "GET", path: `/comments?post=${window.location.pathname.split("/")[2]}` });
-  const [comments, setComments] = useState<ISchemaComment[]>([]);
+  const [comments, setComments] = useState<IComment[]>([]);
 
   const fetchComment = async () => {
     const fetchedData = await fetchData(null);
@@ -59,11 +51,16 @@ const CommentSection = () => {
     fetchComment();
   }, []);
 
+  if (comments === undefined) {
+    return <Loading />;
+  }
+
   if (comments.length > 0) {
     return (
       <section className="text-white flex justify-center">
+        <div className="w-[50px] mr-4" />
         <div className="mt-8 mb-10 bg-softbase rounded pt-4 pb-8 px-8 w-5/6 sm:w-2/3">
-          {comments && comments.map((comment: ISchemaComment, index: number) => (
+          {comments && comments.map((comment: IComment, index: number) => (
             <Comment key={index} comment={comment} />
           ))}
         </div>

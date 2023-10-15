@@ -24,7 +24,7 @@ const Profile = () => {
   }, []);
 
   return (
-    <div ref={cardRef} className="hover:cursor-pointer">
+    <div ref={cardRef} className="hover:cursor-pointer rounded-md py-2 border border-transparent  hover:border-lightbase">
       <div 
         className="flex items-center justify-between"
         onClick={() => setIsOpen(!isOpen)}

@@ -8,7 +8,7 @@ module.exports = {
       colors: {
         base: '#1E1E1E',
         softbase: '#282828',
-        lightbase: '#303030'
+        lightbase: '#303030',
       },
     },
   },

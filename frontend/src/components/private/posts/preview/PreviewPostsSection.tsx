@@ -1,20 +1,14 @@
 import PreviewPost from "./PreviewPost";
 import { useEffect, useState } from "react";
 
-import useFetchBackend from "../../../hooks/useFetchBackend";
-
-interface Post {
-  id: string,
-  userId: string,
-  title: string,
-  mdText: string, 
-  category: string,
-  username: string,
-}
+import useFetchBackend from "../../../../hooks/useFetchBackend";
+import IPost from "../../../../interfaces/IPost";
+import Container from "../../../shared/Container";
+import Loading from "../../../shared/Loading";
 
 const PreviewPostSection = () => {
   const fetchData = useFetchBackend({ method: "GET", path: "/posts" });
-  const [posts, setPosts] = useState<Post[]>([]);
+  const [posts, setPosts] = useState<IPost[]>([]);
 
   const fetchPosts = async () => {
     const fetchedPosts = await fetchData(null);
@@ -30,14 +24,16 @@ const PreviewPostSection = () => {
     fetchPosts();
   }, []);
 
+  if (posts.length === 0) {
+    return <Loading />;
+  }
+
   return (
-    <div className="flex justify-center">
-      <div className="my-10 w-5/6 sm:w-2/3">
-        {posts.map((post: any, key: number) => (
-          <PreviewPost post={post} key={key} />
-        ))}
-      </div>
-    </div>
+    <Container>
+      {posts.map((post: any, key: number) => (
+        <PreviewPost post={post} key={key} />
+      ))}
+    </Container>
   );
 }
 
