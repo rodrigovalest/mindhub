@@ -45,7 +45,7 @@ export const Signup = () => {
       localStorage.removeItem("token");
       alert(fetchedData);
     } else {
-      alert("Account sucefully created!");
+      alert("Account succefully created!");
       navigate("/auth/signin");
     }
   };

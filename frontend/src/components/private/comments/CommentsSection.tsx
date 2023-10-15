@@ -39,12 +39,7 @@ const CommentSection = () => {
 
   const fetchComment = async () => {
     const fetchedData = await fetchData(null);
-
-    if (fetchedData instanceof Error) {
-      alert("Comments loading failed, went wrong!");
-    } else {
-      setComments(toTreeOfComments(fetchedData.data));
-    }
+    setComments(toTreeOfComments(fetchedData.data));
   };
 
   useEffect(() => {

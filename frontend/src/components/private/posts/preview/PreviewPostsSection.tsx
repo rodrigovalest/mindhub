@@ -12,12 +12,7 @@ const PreviewPostSection = () => {
 
   const fetchPosts = async () => {
     const fetchedPosts = await fetchData(null);
-
-    if (fetchedPosts instanceof Error) {
-      alert("Something went wrong!");
-    } else {
-      setPosts(fetchedPosts.data);
-    }
+    setPosts(fetchedPosts.data);
   };
 
   useEffect(() => {

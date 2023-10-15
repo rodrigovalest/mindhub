@@ -37,7 +37,7 @@ export const ChangeProfile = () => {
     const fetchedData = await fetchUser(null);
 
     if (fetchedData instanceof Error) {
-      alert("Invalid token!");
+      alert("Something went wrong!");
       localStorage.removeItem("token");
       navigate("/auth/signin");
     } else {

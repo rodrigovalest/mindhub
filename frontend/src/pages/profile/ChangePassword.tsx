@@ -28,12 +28,6 @@ export const ChangePassword = () => {
   const fetchChanges = useFetchBackend({ method: "PUT", path: "/user/change/password" });
 
   const fetchCredentials = async (credentials: any) => {
-    // const passwordData = {
-    //   newPassword: credentials.
-    // }
-
-    console.log(credentials)
-
     const fetchedData = await fetchChanges(credentials);
 
     if (fetchedData instanceof Error) {

@@ -14,7 +14,7 @@ const UsernameContextProvider = ({ children }: any) => {
     const fetchedData = await fetchData(null);
 
     if (fetchedData instanceof Error) {
-      alert("Invalid token!");
+      alert("Something went wrong!");
       localStorage.removeItem("token");
       setUsername(null);
       navigate("/auth/signin");
