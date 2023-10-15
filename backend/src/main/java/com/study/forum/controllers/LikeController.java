@@ -2,7 +2,9 @@ package com.study.forum.controllers;
 
 import com.study.forum.models.*;
 import com.study.forum.repositories.*;
+import com.study.forum.services.CommentLikeService;
 import com.study.forum.services.JwtTokenService;
+import com.study.forum.services.PostLikeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +20,12 @@ public class LikeController {
 
     @Autowired
     private PostLikeRepository postLikeRepository;
+
+    @Autowired
+    private CommentLikeService commentLikeService;
+
+    @Autowired
+    private PostLikeService postLikeService;
 
     @Autowired
     private CommentRepository commentRepository;
@@ -174,25 +182,6 @@ public class LikeController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/posts/count/{postId}")
-    public ResponseEntity<?> getPostLikeCount(
-            @PathVariable("postId") UUID postId
-    ) throws Exception {
-        Map<String, Object> response = new HashMap<>();
-
-        Optional<Post> optionalPost = this.postRepository.findById(postId);
-        if (optionalPost.isEmpty()) {
-            response.put("message", "Inexistent post");
-            return ResponseEntity.badRequest().body(response);
-        }
-
-        Long countLikes = this.postLikeRepository.countLikesByPostId(postId);
-        Long countDislikes = this.postLikeRepository.countDislikesByPostId(postId);
-
-        response.put("data", (countLikes - countDislikes));
-        return ResponseEntity.ok().body(response);
-    }
-
     @GetMapping("/comments/count/{commentId}")
     public ResponseEntity<?> getCommentLikeCount(
             @PathVariable("commentId") UUID commentId
@@ -204,11 +193,26 @@ public class LikeController {
             response.put("message", "Inexistent comment");
             return ResponseEntity.badRequest().body(response);
         }
+        Comment comment = optionalComment.get();
 
-        Long countLikes = this.commentLikeRepository.countLikesByCommentId(commentId);
-        Long countDislikes = this.commentLikeRepository.countDislikesByCommentId(commentId);
+        response.put("data", this.commentLikeService.countLikesBalanceByComment(comment));
+        return ResponseEntity.ok().body(response);
+    }
 
-        response.put("data", (countLikes - countDislikes));
+    @GetMapping("/posts/count/{postId}")
+    public ResponseEntity<?> getPostLikeCount(
+            @PathVariable("postId") UUID postId
+    ) throws Exception {
+        Map<String, Object> response = new HashMap<>();
+
+        Optional<Post> optionalPost = this.postRepository.findById(postId);
+        if (optionalPost.isEmpty()) {
+            response.put("message", "Inexistent post");
+            return ResponseEntity.badRequest().body(response);
+        }
+        Post post = optionalPost.get();
+
+        response.put("data", this.postLikeService.countLikesBalanceByPost(post));
         return ResponseEntity.ok().body(response);
     }
 }
