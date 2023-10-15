@@ -6,24 +6,15 @@ import MdEditor from "../shared/MdEditor";
 import useFetchBackend from "../../hooks/useFetchBackend";
 import Button from "./Button";
 import LikeButtons from "./LikeButtons";
+import IComment from "../../interfaces/IComment";
 
-interface ISchemaComment {
-  id: string;
-  userId: string;
-  username: string;
-  postId: string;
-  mdText: string,
-  parentCommentId: string | null;
-  children?: ISchemaComment[];
-}
-
-interface IComment {
+interface IPropsComment {
   key?: number,
   className?: string,
-  comment: ISchemaComment,
+  comment: IComment,
 }
 
-const Comment = ({ comment, className }: IComment) => {
+const Comment = ({ comment, className }: IPropsComment) => {
   const fetchComment = useFetchBackend({ method: "POST", path: `/comments` });
   const [commentText, setCommentText] = useState<string>("");
   const [isCommenting, setIsCommenting] = useState<boolean>(false);
@@ -49,7 +40,7 @@ const Comment = ({ comment, className }: IComment) => {
     <>
       <div className="flex pt-8 w-full">
         <div>
-          <LikeButtons />
+          {/* <LikeButtons /> */}
 
           {/* <div className="w-[1px] ml-[38%] mt-[10px] bg-gray-300 h-full" /> */}
         </div>

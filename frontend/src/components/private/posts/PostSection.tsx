@@ -8,11 +8,12 @@ import Button from "../../shared/Button";
 import MdEditor from "../../shared/MdEditor";
 import LikeButtons from "../../shared/LikeButtons";
 import PostHeader from "./PostHeader";
+import IPost from "../../../interfaces/IPost";
 
 const PostSection = () => {
   const navigate = useNavigate();
   const fetchPost = useFetchBackend({ method: "GET", path: `${window.location.pathname}` });
-  const [post, setPost] = useState<any>("");
+  const [post, setPost] = useState<IPost>({} as IPost);
 
   const fetchComment = useFetchBackend({ method: "POST", path: `/comments` });
   const [commentText, setCommentText] = useState<string>("");
@@ -52,7 +53,7 @@ const PostSection = () => {
   return (
     <section>
       <div className="flex justify-center">
-        <LikeButtons />
+        <LikeButtons post={post} />
 
         <PostHeader post={post} />
       </div>

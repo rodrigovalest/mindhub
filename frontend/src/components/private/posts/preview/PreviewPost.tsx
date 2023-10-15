@@ -1,12 +1,13 @@
 import ReactMarkdown from "react-markdown";
 import { Link, useNavigate } from "react-router-dom";
+import IPost from "../../../../interfaces/IPost";
 
-interface IPreviewPost {
-  post: any,
+interface IPropsPreviewPost {
+  post: IPost,
   key?: any,
 }
 
-const PreviewPost = ({ post }: IPreviewPost) => {
+const PreviewPost = ({ post }: IPropsPreviewPost) => {
   const navigate = useNavigate();
   const truncatedMdText = post.mdText.slice(0, 400);
 

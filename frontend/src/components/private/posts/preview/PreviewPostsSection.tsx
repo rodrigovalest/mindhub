@@ -2,19 +2,11 @@ import PreviewPost from "./PreviewPost";
 import { useEffect, useState } from "react";
 
 import useFetchBackend from "../../../../hooks/useFetchBackend";
-
-interface Post {
-  id: string,
-  userId: string,
-  title: string,
-  mdText: string, 
-  category: string,
-  username: string,
-}
+import IPost from "../../../../interfaces/IPost";
 
 const PreviewPostSection = () => {
   const fetchData = useFetchBackend({ method: "GET", path: "/posts" });
-  const [posts, setPosts] = useState<Post[]>([]);
+  const [posts, setPosts] = useState<IPost[]>([]);
 
   const fetchPosts = async () => {
     const fetchedPosts = await fetchData(null);

@@ -1,10 +1,11 @@
 import { Link } from "react-router-dom";
+import IPost from "../../../interfaces/IPost";
 
-interface IPostHeader {
-  post: any,
+interface IPropsPostHeader {
+  post: IPost,
 }
 
-const PostHeader = ({ post }: IPostHeader) => {
+const PostHeader = ({ post }: IPropsPostHeader) => {
   return (
     <div className="w-5/6 sm:w-2/3">
       <h2 className="text-indigo-500 text-4xl font-bold mb-5">
