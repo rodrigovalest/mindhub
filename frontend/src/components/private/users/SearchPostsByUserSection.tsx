@@ -16,13 +16,15 @@ interface Post {
 export const SearchPostsByUserSection = () => {
   const fetchData = useFetchBackend({ method: "GET", path: `/posts${window.location.pathname}` });
   const [posts, setPosts] = useState<Post[]>([]);
+  const [userExists, setUserExists] = useState<boolean>();
 
   const fetchPosts = async () => {
     const fetchedPosts = await fetchData(null);
 
     if (fetchedPosts instanceof Error) {
-      alert("Something went wrong!");
+      setUserExists(false);
     } else {
+      setUserExists(true);
       setPosts(fetchedPosts.data);
     }
   };
@@ -36,16 +38,21 @@ export const SearchPostsByUserSection = () => {
       <h1 className="pb-6 text-4xl font-bold text-indigo-600">
         {window.location.pathname.replace(/^\/users\//, '')}
       </h1>
-      {posts.length > 0 && (
+      {posts.length > 0 && userExists && (
         <div>
           {posts.map((post: any, key: number) => (
             <PreviewPost post={post} key={key} />
           ))}
         </div>
       )}
-      {posts.length === 0 && (
+      {posts.length === 0 && userExists && (
         <div>
-          <h1 className="pb-6 text-white">It seems like there's nothing here</h1>
+          <p className="pb-6 text-white">It seems like there's nothing here</p>
+        </div>
+      )}
+      {posts.length === 0 && !userExists && (
+        <div>
+          <p className="pb-6 text-white">This user does not exist</p>
         </div>
       )}
     </Container>

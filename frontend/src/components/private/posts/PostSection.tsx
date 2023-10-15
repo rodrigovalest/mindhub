@@ -8,6 +8,7 @@ import MdEditor from "../../shared/MdEditor";
 import LikeButtons from "./PostLikeButtons";
 import PostHeader from "./PostHeader";
 import IPost from "../../../interfaces/IPost";
+import Loading from "../../shared/Loading";
 
 interface IPropsPostSection {
   post: IPost
@@ -41,7 +42,7 @@ const PostSection = ({ post }: IPropsPostSection) => {
   }, []);
 
   if (!postLoaded) {
-    return null;
+    return <Loading />;
   }
 
   return (

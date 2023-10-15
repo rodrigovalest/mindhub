@@ -1,11 +1,16 @@
 import { Link } from "react-router-dom";
 import IPost from "../../../interfaces/IPost";
+import Loading from "../../shared/Loading";
 
 interface IPropsPostHeader {
   post: IPost,
 }
 
 const PostHeader = ({ post }: IPropsPostHeader) => {
+  if (!post) {
+    return <Loading />;
+  }
+
   return (
     <div className="w-5/6 sm:w-2/3 mb-[8px]">
       <h2 className="text-indigo-500 text-4xl font-bold mb-5 break-all">

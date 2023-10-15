@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import useFetchBackend from "../../../../hooks/useFetchBackend";
 import IPost from "../../../../interfaces/IPost";
 import Container from "../../../shared/Container";
+import Loading from "../../../shared/Loading";
 
 const PreviewPostSection = () => {
   const fetchData = useFetchBackend({ method: "GET", path: "/posts" });
@@ -22,6 +23,10 @@ const PreviewPostSection = () => {
   useEffect(() => {
     fetchPosts();
   }, []);
+
+  if (posts.length === 0) {
+    return <Loading />;
+  }
 
   return (
     <Container>

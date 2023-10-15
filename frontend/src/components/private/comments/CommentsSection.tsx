@@ -2,6 +2,7 @@ import useFetchBackend from "../../../hooks/useFetchBackend";
 import { useEffect, useState } from "react";
 import Comment from "./Comment";
 import IComment from "../../../interfaces/IComment";
+import Loading from "../../shared/Loading";
 
 const toTreeOfComments = (comments: IComment[]) => {
   const searchParentComment = (parentCommentId: string): IComment | null => {
@@ -49,6 +50,10 @@ const CommentSection = () => {
   useEffect(() => {
     fetchComment();
   }, []);
+
+  if (comments === undefined) {
+    return <Loading />;
+  }
 
   if (comments.length > 0) {
     return (

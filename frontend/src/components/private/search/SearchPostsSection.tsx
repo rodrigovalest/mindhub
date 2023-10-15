@@ -3,6 +3,8 @@ import { useState, useEffect } from "react";
 import useFetchBackend from "../../../hooks/useFetchBackend";
 import PreviewPost from "../posts/preview/PreviewPost";
 import Container from "../../shared/Container";
+import Loading from "../../shared/Loading";
+import { useNavigate } from "react-router-dom";
 
 interface Post {
   id: string,
@@ -20,16 +22,16 @@ export const SearchPostsSection = () => {
   const fetchPosts = async () => {
     const fetchedPosts = await fetchData(null);
 
-    if (fetchedPosts instanceof Error) {
-      alert("Something went wrong!");
-    } else {
-      setPosts(fetchedPosts.data);
-    }
+    setPosts(fetchedPosts.data);
   };
 
   useEffect(() => {
     fetchPosts();
   }, []);
+
+  if (posts === undefined) {
+    return <Loading />;
+  }
 
   return (
     <Container>
@@ -44,6 +46,7 @@ export const SearchPostsSection = () => {
       {posts.length === 0 && (
         <div>
           <h1 className="pb-6 text-4xl font-bold text-indigo-600">No results found</h1>
+          <p className="text-white">{"=("}</p>
         </div>
       )}
     </Container>
