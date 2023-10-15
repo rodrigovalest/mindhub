@@ -24,7 +24,7 @@ const PreviewPostSection = () => {
 
   return (
     <div className="flex justify-center">
-      <div className="my-10 w-5/6 sm:w-2/3">
+      <div className="my-10 w-5/6 md:w-2/3">
         {posts.map((post: any, key: number) => (
           <PreviewPost post={post} key={key} />
         ))}

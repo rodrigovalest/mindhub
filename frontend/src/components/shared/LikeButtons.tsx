@@ -36,6 +36,7 @@ const LikeButtons = ({ post }: IPropsLikeButtons) => {
     setLikeClicked(!likeClicked);
     if (dislikeClicked) {
       setDislikeClicked(false);
+      post.likeBalance++;
     }
 
     const response = await fetchLike(null);
@@ -55,6 +56,7 @@ const LikeButtons = ({ post }: IPropsLikeButtons) => {
 
     setDislikeClicked(!dislikeClicked);
     if (likeClicked) {
+      post.likeBalance--;
       setLikeClicked(false);
     }
 
