@@ -5,8 +5,8 @@ MindHub é um fórum designado para estudantes compartilharem suas ideias, dicas
 
 ## Tecnologias utilizadas
 - React (Typescript)
-- Spring Boot (Java)
-- MariaDB
+- Spring Boot
+- MySQL
 
 ## Imagens
 ![Sign up page](images/signup.png)
