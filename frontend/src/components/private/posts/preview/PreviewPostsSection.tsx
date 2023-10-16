@@ -8,24 +8,27 @@ import Loading from "../../../shared/Loading";
 
 const PreviewPostSection = () => {
   const fetchData = useFetchBackend({ method: "GET", path: "/posts" });
-  const [posts, setPosts] = useState<IPost[]>([]);
+  const [posts, setPosts] = useState<IPost[] | undefined>();
 
   const fetchPosts = async () => {
     const fetchedPosts = await fetchData(null);
-
-    if (fetchedPosts instanceof Error) {
-      alert("Something went wrong!");
-    } else {
-      setPosts(fetchedPosts.data);
-    }
+    setPosts(fetchedPosts.data);
   };
 
   useEffect(() => {
     fetchPosts();
   }, []);
 
-  if (posts.length === 0) {
+  if (posts === undefined) {
     return <Loading />;
+  }
+
+  if (posts.length === 0) {
+    return (
+      <Container>
+        <p className="text-white">No posts found</p>
+      </Container>
+    );
   }
 
   return (
